@@ -752,7 +752,7 @@ textarea.form-input {
   }
 
   .nav-links {
-    display: none; /* Hide standard links on mobile */
+    display: none !important; /* Hide standard links on mobile */
   }
 
   .hamburger {
