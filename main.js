@@ -1,13 +1,55 @@
 import Lenis from 'lenis';
 import VanillaTilt from 'vanilla-tilt';
 
-// 1. Initialize Smooth Scrolling (Lenis)
-const lenis = new Lenis();
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
+// Mobile Detection
+const isMobile = () => window.innerWidth <= 768;
+const isHoverable = window.matchMedia('(hover: hover)').matches;
+
+// Mobile Hero Animations - Trigger on load
+if (isMobile()) {
+    window.addEventListener('load', () => {
+        const heroTitle = document.getElementById('hero-title');
+        const heroSubtitle = document.getElementById('hero-subtitle');
+        const heroActions = document.getElementById('hero-actions');
+        const badgeContainer = document.getElementById('badge-container');
+        const badgePills = document.querySelectorAll('.badge-pill');
+
+        // Stagger animations
+        if (heroTitle) {
+            heroTitle.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards';
+            heroTitle.style.opacity = '1';
+        }
+
+        if (heroSubtitle) {
+            heroSubtitle.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.2s forwards';
+            heroSubtitle.style.opacity = '1';
+        }
+
+        if (badgeContainer) {
+            badgePills.forEach((pill, index) => {
+                pill.style.animation = `bounce-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${0.4 + index * 0.1}s forwards`;
+                pill.style.opacity = '0';
+            });
+        }
+
+        if (heroActions) {
+            heroActions.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards';
+            heroActions.style.opacity = '1';
+        }
+
+        // Add button tap animation
+        const buttons = document.querySelectorAll('.hero-actions .btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+                if (navigator.vibrate) navigator.vibrate(20);
+            });
+            btn.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    });
 }
-requestAnimationFrame(raf);
 
 // 2. Project Data with Case Studies (Problem vs Solution)
 const projects = [
@@ -107,8 +149,7 @@ if (modal) {
 }
 
 // Initialize Tilts after rendering - Only if hover is supported
-const isHoverable = window.matchMedia('(hover: hover)').matches;
-if (isHoverable) {
+if (isHoverable && !isMobile()) {
     VanillaTilt.init(document.querySelectorAll(".project-card"), {
         max: 15,
         speed: 400,
@@ -116,11 +157,25 @@ if (isHoverable) {
         "max-glare": 0.2,
     });
 }
-// 4. Custom Cursor Logic (LERP) - Only if hover is supported
+
+// Mobile-optimized project card interactions
+if (isMobile()) {
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach(card => {
+        card.addEventListener('touchstart', function() {
+            this.style.transform = 'translateY(-8px)';
+            if (navigator.vibrate) navigator.vibrate(15);
+        });
+        card.addEventListener('touchend', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+}
+// 4. Custom Cursor Logic (LERP) - Only if hover is supported and NOT mobile
 const cursorDot = document.querySelector(".cursor-dot");
 const cursorOutline = document.querySelector(".cursor-outline");
 
-if (isHoverable && cursorDot && cursorOutline) {
+if (isHoverable && !isMobile() && cursorDot && cursorOutline) {
     window.addEventListener("mousemove", (e) => {
         const posX = e.clientX;
         const posY = e.clientY;
@@ -147,12 +202,12 @@ if (isHoverable && cursorDot && cursorOutline) {
     });
 }
 
-// 5. Dynamic Hero Parallax & Focus Glow
+// 5. Dynamic Hero Parallax & Focus Glow - Only on desktop
 const hero = document.querySelector('#hero');
 const floatCards = document.querySelectorAll('.hero-float-card');
 const cursorGlow = document.querySelector('.hero-cursor-glow');
 
-if (hero && isHoverable) {
+if (hero && isHoverable && !isMobile()) {
     hero.addEventListener('mousemove', (e) => {
         const { clientX, clientY } = e;
         const { innerWidth, innerHeight } = window;
@@ -171,7 +226,7 @@ if (hero && isHoverable) {
     });
 }
 
-// 6. Mobile Menu Logic
+// 6. Mobile Menu Logic with Enhanced Touch Support
 const hamburger = document.querySelector('.hamburger');
 const mobileMenu = document.querySelector('.mobile-menu');
 const mobileLinks = document.querySelectorAll('.mobile-link');
@@ -187,6 +242,23 @@ if (hamburger && mobileMenu) {
             mobileMenu.classList.remove('active');
             hamburger.classList.remove('open');
         });
+
+        // Add touch feedback
+        link.addEventListener('touchstart', function() {
+            this.style.opacity = '0.7';
+        });
+
+        link.addEventListener('touchend', function() {
+            this.style.opacity = '1';
+        });
+    });
+
+    // Close menu on outside click
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.hamburger') && !e.target.closest('.mobile-menu')) {
+            mobileMenu.classList.remove('active');
+            hamburger.classList.remove('open');
+        }
     });
 }
 
@@ -202,16 +274,43 @@ if (contactForm) {
         
         btn.disabled = true;
         btn.innerText = 'Sending...';
+        btn.style.animation = 'button-pulse 1.5s infinite';
         formStatus.innerHTML = '';
+
+        // Add haptic feedback on mobile
+        if (isMobile() && navigator.vibrate) {
+            navigator.vibrate(50);
+        }
 
         // Simulate functional API call
         setTimeout(() => {
             btn.disabled = false;
             btn.innerText = originalText;
-            formStatus.innerHTML = '<span class="form-success">Message sent successfully! We will contact you soon.</span>';
+            btn.style.animation = 'none';
+            formStatus.innerHTML = '<span class="form-success" style="color: #4ade80; animation: fade-in 0.5s ease;">✓ Message sent successfully! We will contact you soon.</span>';
             contactForm.reset();
+
+            // Mobile haptic feedback on success
+            if (isMobile() && navigator.vibrate) {
+                navigator.vibrate([100, 50, 100]);
+            }
         }, 1500);
     });
+
+    // Add hover effects for desktop buttons
+    if (!isMobile()) {
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                if (this.classList.contains('btn-primary')) {
+                    this.style.boxShadow = '0 15px 30px rgba(112, 112, 255, 0.4)';
+                }
+            });
+            btn.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '';
+            });
+        });
+    }
 }
 
 // 6. Reveal Animations
@@ -227,10 +326,20 @@ document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
-        navbar.style.padding = '0.8rem 0';
-        navbar.style.background = 'hsla(220, 30%, 5%, 0.9)';
+        navbar.style.padding = isMobile() ? '0.6rem 0' : '0.8rem 0';
+        navbar.style.background = 'hsla(220, 30%, 5%, 0.95)';
     } else {
-        navbar.style.padding = '1.5rem 0';
+        navbar.style.padding = isMobile() ? '0.75rem 0' : '1.5rem 0';
         navbar.style.background = 'transparent';
+    }
+});
+
+// Handle Resize Events for Mobile/Desktop Transitions
+let lastWindowSize = window.innerWidth;
+window.addEventListener('resize', () => {
+    const currentWindowSize = window.innerWidth;
+    if ((lastWindowSize <= 768 && currentWindowSize > 768) || (lastWindowSize > 768 && currentWindowSize <= 768)) {
+        // Reload scripts if transitioning between mobile and desktop
+        lastWindowSize = currentWindowSize;
     }
 });
