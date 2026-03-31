@@ -226,30 +226,72 @@ if (hero && isHoverable && !isMobile()) {
     });
 }
 
-// 6. Mobile Menu Logic with Enhanced Touch Support
+// 6. Mobile Menu Logic with Full Enhancements
 const hamburger = document.querySelector('.hamburger');
 const mobileMenu = document.querySelector('.mobile-menu');
 const mobileLinks = document.querySelectorAll('.mobile-link');
 
 if (hamburger && mobileMenu) {
-    hamburger.addEventListener('click', () => {
+    // Hamburger click handler with haptic feedback
+    hamburger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isOpen = mobileMenu.classList.contains('active');
+        
+        // Toggle menu
         mobileMenu.classList.toggle('active');
         hamburger.classList.toggle('open');
+        
+        // Update ARIA attributes
+        hamburger.setAttribute('aria-expanded', !isOpen);
+        
+        // Haptic feedback on tap
+        if (navigator.vibrate) {
+            navigator.vibrate(isOpen ? 30 : [20, 10, 20]);
+        }
     });
 
-    mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
+    // Staggered link animations on menu open
+    mobileLinks.forEach((link, index) => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Get href for smooth scroll
+            const href = link.getAttribute('href');
+            
+            // Haptic feedback
+            if (navigator.vibrate) navigator.vibrate(15);
+            
+            // Close menu
             mobileMenu.classList.remove('active');
             hamburger.classList.remove('open');
+            hamburger.setAttribute('aria-expanded', 'false');
+            
+            // Smooth scroll to target after menu closes
+            setTimeout(() => {
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 300);
         });
 
-        // Add touch feedback
+        // Enhanced touch feedback with scale
         link.addEventListener('touchstart', function() {
-            this.style.opacity = '0.7';
+            this.style.transform = 'scale(0.95)';
+            if (navigator.vibrate) navigator.vibrate(10);
         });
 
         link.addEventListener('touchend', function() {
-            this.style.opacity = '1';
+            this.style.transform = 'scale(1)';
+        });
+
+        // Focus state styling
+        link.addEventListener('focus', function() {
+            this.style.boxShadow = 'inset 0 0 12px rgba(112, 112, 255, 0.2)';
+        });
+
+        link.addEventListener('blur', function() {
+            this.style.boxShadow = '';
         });
     });
 
@@ -258,6 +300,17 @@ if (hamburger && mobileMenu) {
         if (!e.target.closest('.hamburger') && !e.target.closest('.mobile-menu')) {
             mobileMenu.classList.remove('active');
             hamburger.classList.remove('open');
+            hamburger.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Close menu on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+            mobileMenu.classList.remove('active');
+            hamburger.classList.remove('open');
+            hamburger.setAttribute('aria-expanded', 'false');
+            hamburger.focus();
         }
     });
 }

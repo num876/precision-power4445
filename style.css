@@ -752,7 +752,7 @@ textarea.form-input {
   }
 
   .nav-links {
-    display: none; /* Hide standard links on mobile */
+    display: none !important; /* Hide standard links on mobile */
   }
 
   .hamburger {
@@ -761,6 +761,31 @@ textarea.form-input {
     z-index: 5000;
     padding: 8px;
     -webkit-tap-highlight-color: transparent;
+    background: none;
+    border: none;
+    position: relative;
+    will-change: transform;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .hamburger:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 4px;
+    border-radius: 8px;
+  }
+
+  .hamburger.open {
+    transform: scale(0.95);
+    animation: hamburger-glow 1.5s ease-in-out infinite;
+  }
+
+  @keyframes hamburger-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(112, 112, 255, 0.7), inset 0 0 0 0 rgba(112, 112, 255, 0.1);
+    }
+    50% {
+      box-shadow: 0 0 8px 2px rgba(112, 112, 255, 0.4), inset 0 0 12px 2px rgba(112, 112, 255, 0.15);
+    }
   }
 
   .hamburger span {
@@ -769,8 +794,23 @@ textarea.form-input {
     height: 2.5px;
     background: var(--text-main);
     margin: 6px 0;
-    transition: var(--transition-smooth);
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
     touch-action: manipulation;
+    will-change: transform, opacity;
+    transform-origin: center;
+  }
+
+  .hamburger.open span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+  }
+
+  .hamburger.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .hamburger.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
   }
 
   /* 2. Full-Screen Mobile Menu */
@@ -781,7 +821,7 @@ textarea.form-input {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.98);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(10px);
     z-index: 4000;
     display: flex;
     flex-direction: column;
@@ -790,7 +830,8 @@ textarea.form-input {
     gap: var(--spacing-md);
     opacity: 0;
     pointer-events: none;
-    transition: var(--transition-smooth);
+    transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1), backdrop-filter 0.4s ease;
+    will-change: opacity;
   }
 
   .mobile-menu.active {
@@ -804,15 +845,66 @@ textarea.form-input {
     font-weight: 700;
     color: var(--text-main);
     text-decoration: none;
-    transition: var(--accent-primary) 0.3s ease;
-    min-height: 44px;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    min-height: 48px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: 12px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    will-change: transform, opacity, color;
   }
 
-  .mobile-menu a:hover,
-  .mobile-menu a:active {
+  .mobile-menu.active a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-menu a:nth-child(1) { animation: stagger-in 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.1s forwards; }
+  .mobile-menu a:nth-child(2) { animation: stagger-in 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.2s forwards; }
+  .mobile-menu a:nth-child(3) { animation: stagger-in 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.3s forwards; }
+
+  @keyframes stagger-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mobile-menu a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+    transform: translateX(-50%);
+    transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .mobile-menu a:active::before,
+  .mobile-menu a:focus::before {
+    width: 80%;
+  }
+
+  .mobile-menu a:active,
+  .mobile-menu a:focus {
     color: var(--accent-primary);
+    background: rgba(112, 112, 255, 0.1);
+    outline: none;
+  }
+
+  .mobile-menu a:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 4px;
   }
 
   /* 3. Hero Section - Mobile Optimizations */
