@@ -1,8 +1,16 @@
 import Lenis from 'lenis';
 import VanillaTilt from 'vanilla-tilt';
 
-// 1. Initialize Smooth Scrolling (Lenis)
-const lenis = new Lenis();
+// Mobile Detection
+const isMobile = () => window.innerWidth <= 768;
+const isHoverable = window.matchMedia('(hover: hover)').matches;
+
+// 1. Initialize Smooth Scrolling (Lenis) - Disable on mobile for better performance
+const lenis = new Lenis({
+    duration: isMobile() ? 0.8 : 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+});
+
 function raf(time) {
   lenis.raf(time);
   requestAnimationFrame(raf);
@@ -107,8 +115,7 @@ if (modal) {
 }
 
 // Initialize Tilts after rendering - Only if hover is supported
-const isHoverable = window.matchMedia('(hover: hover)').matches;
-if (isHoverable) {
+if (isHoverable && !isMobile()) {
     VanillaTilt.init(document.querySelectorAll(".project-card"), {
         max: 15,
         speed: 400,
@@ -116,11 +123,11 @@ if (isHoverable) {
         "max-glare": 0.2,
     });
 }
-// 4. Custom Cursor Logic (LERP) - Only if hover is supported
+// 4. Custom Cursor Logic (LERP) - Only if hover is supported and NOT mobile
 const cursorDot = document.querySelector(".cursor-dot");
 const cursorOutline = document.querySelector(".cursor-outline");
 
-if (isHoverable && cursorDot && cursorOutline) {
+if (isHoverable && !isMobile() && cursorDot && cursorOutline) {
     window.addEventListener("mousemove", (e) => {
         const posX = e.clientX;
         const posY = e.clientY;
@@ -147,12 +154,12 @@ if (isHoverable && cursorDot && cursorOutline) {
     });
 }
 
-// 5. Dynamic Hero Parallax & Focus Glow
+// 5. Dynamic Hero Parallax & Focus Glow - Only on desktop
 const hero = document.querySelector('#hero');
 const floatCards = document.querySelectorAll('.hero-float-card');
 const cursorGlow = document.querySelector('.hero-cursor-glow');
 
-if (hero && isHoverable) {
+if (hero && isHoverable && !isMobile()) {
     hero.addEventListener('mousemove', (e) => {
         const { clientX, clientY } = e;
         const { innerWidth, innerHeight } = window;
@@ -171,7 +178,7 @@ if (hero && isHoverable) {
     });
 }
 
-// 6. Mobile Menu Logic
+// 6. Mobile Menu Logic with Enhanced Touch Support
 const hamburger = document.querySelector('.hamburger');
 const mobileMenu = document.querySelector('.mobile-menu');
 const mobileLinks = document.querySelectorAll('.mobile-link');
@@ -187,6 +194,23 @@ if (hamburger && mobileMenu) {
             mobileMenu.classList.remove('active');
             hamburger.classList.remove('open');
         });
+
+        // Add touch feedback
+        link.addEventListener('touchstart', function() {
+            this.style.opacity = '0.7';
+        });
+
+        link.addEventListener('touchend', function() {
+            this.style.opacity = '1';
+        });
+    });
+
+    // Close menu on outside click
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.hamburger') && !e.target.closest('.mobile-menu')) {
+            mobileMenu.classList.remove('active');
+            hamburger.classList.remove('open');
+        }
     });
 }
 
@@ -204,12 +228,22 @@ if (contactForm) {
         btn.innerText = 'Sending...';
         formStatus.innerHTML = '';
 
+        // Add haptic feedback on mobile
+        if (isMobile() && navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+
         // Simulate functional API call
         setTimeout(() => {
             btn.disabled = false;
             btn.innerText = originalText;
-            formStatus.innerHTML = '<span class="form-success">Message sent successfully! We will contact you soon.</span>';
+            formStatus.innerHTML = '<span class="form-success" style="color: #4ade80;">Message sent successfully! We will contact you soon.</span>';
             contactForm.reset();
+
+            // Mobile haptic feedback on success
+            if (isMobile() && navigator.vibrate) {
+                navigator.vibrate([100, 50, 100]);
+            }
         }, 1500);
     });
 }
@@ -227,10 +261,20 @@ document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
-        navbar.style.padding = '0.8rem 0';
-        navbar.style.background = 'hsla(220, 30%, 5%, 0.9)';
+        navbar.style.padding = isMobile() ? '0.6rem 0' : '0.8rem 0';
+        navbar.style.background = 'hsla(220, 30%, 5%, 0.95)';
     } else {
-        navbar.style.padding = '1.5rem 0';
+        navbar.style.padding = isMobile() ? '0.75rem 0' : '1.5rem 0';
         navbar.style.background = 'transparent';
+    }
+});
+
+// Handle Resize Events for Mobile/Desktop Transitions
+let lastWindowSize = window.innerWidth;
+window.addEventListener('resize', () => {
+    const currentWindowSize = window.innerWidth;
+    if ((lastWindowSize <= 768 && currentWindowSize > 768) || (lastWindowSize > 768 && currentWindowSize <= 768)) {
+        // Reload scripts if transitioning between mobile and desktop
+        lastWindowSize = currentWindowSize;
     }
 });

@@ -634,7 +634,11 @@ textarea.form-input {
 
 /* Mobile-Only Overrides (Max-width: 768px) */
 @media screen and (max-width: 768px) {
-  /* 1. Navbar & Hamburger */
+  /* 1. Navbar & Hamburger Improvements */
+  .navbar {
+    padding: 0.75rem 0;
+  }
+
   .nav-links {
     display: none; /* Hide standard links on mobile */
   }
@@ -643,15 +647,18 @@ textarea.form-input {
     display: block;
     cursor: pointer;
     z-index: 5000;
+    padding: 8px;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .hamburger span {
     display: block;
-    width: 25px;
-    height: 2px;
+    width: 28px;
+    height: 2.5px;
     background: var(--text-main);
     margin: 6px 0;
     transition: var(--transition-smooth);
+    touch-action: manipulation;
   }
 
   /* 2. Full-Screen Mobile Menu */
@@ -661,7 +668,7 @@ textarea.form-input {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0, 0, 0, 0.98);
     backdrop-filter: blur(20px);
     z-index: 4000;
     display: flex;
@@ -686,22 +693,32 @@ textarea.form-input {
     color: var(--text-main);
     text-decoration: none;
     transition: var(--accent-primary) 0.3s ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
   }
 
-  .mobile-menu a:hover {
+  .mobile-menu a:hover,
+  .mobile-menu a:active {
     color: var(--accent-primary);
   }
 
-  /* 3. Hero Adjustments */
+  /* 3. Hero Section Optimizations */
+  .hero {
+    padding-top: var(--spacing-lg);
+    min-height: auto;
+  }
+
   .hero-title {
-    font-size: 2.2rem;
-    line-height: 1.1;
+    font-size: clamp(1.75rem, 5vw, 2.2rem);
+    line-height: 1.2;
     margin-bottom: var(--spacing-sm);
   }
 
   .hero-subtitle {
-    font-size: 1rem;
+    font-size: 0.95rem;
     margin-bottom: var(--spacing-md);
+    line-height: 1.5;
   }
 
   .hero-actions {
@@ -711,30 +728,167 @@ textarea.form-input {
 
   .hero-actions .btn {
     width: 100%;
+    padding: 10px 24px;
+    font-size: 0.95rem;
   }
 
-  /* 4. Philosophy & Grid */
+  /* 4. Hide Hero Orbs & Float Cards */
+  .hero-orb,
+  .hero-float-card,
+  .hero-cursor-glow {
+    display: none !important;
+  }
+
+  /* 5. Disable Background Glows Animation */
+  .bg-glow {
+    animation: none !important;
+  }
+
+  /* 6. Section Title Responsive Sizing */
+  .section-title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  /* 7. Tech Marquee Font Sizing */
+  .tech-item {
+    font-size: clamp(0.65rem, 2vw, 0.9rem);
+  }
+
+  /* 8. Project Cards Mobile Optimization */
   .services-grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
   }
 
   .project-grid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-md);
   }
 
-  /* 5. Custom Cursor (Hide on Touch) */
-  .cursor-dot, .cursor-outline {
-    display: none !important;
+  .project-image-container {
+    aspect-ratio: 4/3;
+    margin-bottom: var(--spacing-sm);
   }
 
-  /* 6. General Adjustments */
-  .container {
-    padding: 0 1.5rem;
+  .project-card {
+    padding: var(--spacing-sm);
+  }
+
+  .project-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .project-title {
+    font-size: 1.25rem;
+  }
+
+  .project-desc {
+    font-size: 0.9rem;
+  }
+
+  /* 9. Modal Responsive Design */
+  .modal {
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(5px);
+  }
+
+  .modal-content {
+    padding: var(--spacing-md);
+    max-width: 90vw;
+    width: 90vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-radius: 20px;
+  }
+
+  .close-modal {
+    top: 12px;
+    right: 12px;
+    font-size: 1.75rem;
+  }
+
+  /* 10. Footer Title Responsive */
+  .footer-title {
+    font-size: clamp(1.75rem, 5vw, 4rem);
+    margin-bottom: var(--spacing-md);
+  }
+
+  /* 11. Form Optimizations */
+  .contact-form-container {
+    max-width: 100%;
+    padding: 0 var(--spacing-xs);
+  }
+
+  .form-input {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+
+  textarea.form-input {
+    height: 100px;
+  }
+
+  .btn {
+    min-height: 44px;
+    font-size: 0.95rem;
+  }
+
+  /* 12. Section Padding */
+  section {
+    padding: var(--spacing-lg) 0;
   }
 
   .section-header {
     margin-bottom: var(--spacing-md);
+  }
+
+  /* 13. Custom Cursor (Hide on Touch) */
+  .cursor-dot, .cursor-outline {
+    display: none !important;
+  }
+
+  /* 14. General Container */
+  .container {
+    padding: 0 1.5rem;
+  }
+
+  /* 15. Touch Interaction Improvements */
+  touch-action: manipulation;
+}
+
+/* Extra Small Devices (< 480px) */
+@media screen and (max-width: 480px) {
+  .hero-title {
+    font-size: clamp(1.5rem, 4vw, 1.75rem);
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .modal-content {
+    padding: var(--spacing-sm);
+  }
+
+  .form-input {
+    padding: 10px 14px;
+    font-size: 16px;
+  }
+
+  .project-info {
+    padding: 0;
+  }
+
+  .tech-item {
+    font-size: clamp(0.6rem, 1.5vw, 0.8rem);
   }
 }
 
