@@ -703,37 +703,27 @@ textarea.form-input {
     color: var(--accent-primary);
   }
 
-  /* 3. Hero Section Optimizations */
-  .hero {
-    padding-top: var(--spacing-lg);
-    padding-bottom: var(--spacing-lg);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
+  /* 3. Hero Section - Keep Desktop Styles */
+  
   .hero-title {
-    font-size: clamp(1.75rem, 5vw, 2.2rem);
-    line-height: 1.2;
-    margin-bottom: var(--spacing-sm);
+    line-height: 1.1;
+    margin-bottom: var(--spacing-md);
   }
 
   .hero-subtitle {
-    font-size: 0.95rem;
-    margin-bottom: var(--spacing-md);
-    line-height: 1.5;
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.6;
   }
 
   .hero-actions {
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--spacing-sm);
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .hero-actions .btn {
-    width: 100%;
-    padding: 10px 24px;
-    font-size: 0.95rem;
+    padding: 12px 32px;
   }
 
   /* 4. Hide Hero Orbs & Float Cards */
