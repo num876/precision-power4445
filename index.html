@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precision & Power | Elite Landing Pages</title>
+    <meta name="description" content="A curated portfolio showcasing high-performance landing pages: Clinical Elegance & Athletic Strength.">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar glass">
+        <div class="container navbar-inner">
+            <a href="#" class="logo">PRECISION & POWER.</a>
+            
+            <!-- Desktop Links -->
+            <div class="nav-links">
+                <a href="#projects">Work</a>
+                <a href="#services">About</a>
+                <a href="#contact" class="btn btn-outline btn-sm">Contact</a>
+            </div>
+
+            <!-- Hamburger Button (Mobile Only) -->
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu">
+        <a href="#projects" class="mobile-link">Work</a>
+        <a href="#services" class="mobile-link">About</a>
+        <a href="#contact" class="mobile-link">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <header id="hero" class="hero">
+        <!-- Floating Animated Orbs -->
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+
+        <!-- Mouse-Follow Glow -->
+        <div class="hero-cursor-glow"></div>
+
+        <div class="bg-glow bg-glow-1"></div>
+        <div class="bg-glow bg-glow-2"></div>
+
+        <!-- Floating UI Cards -->
+        <div class="hero-float-card float-1 reveal" data-speed="2">
+            <span>⚡ 100% Performance</span>
+        </div>
+        <div class="hero-float-card float-2 reveal" data-speed="-3">
+            <span>🎯 Conversion DNA</span>
+        </div>
+        <div class="hero-float-card float-3 reveal" data-speed="1.5">
+            <span>💎 Bespoke Architecture</span>
+        </div>
+
+        <div class="container hero-content">
+            <h1 class="hero-title reveal">Where Precision Meets <span class="gradient-text">Power.</span></h1>
+            <p class="hero-subtitle reveal">Specializing in high-performance landing pages designed for elite conversion and visual excellence.</p>
+            <div class="hero-actions reveal">
+                <a href="#projects" class="btn btn-primary">Dive into the Work</a>
+                <a href="#contact" class="btn btn-outline">Start a Project</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tech Marquee -->
+    <div class="tech-marquee reveal">
+        <div class="marquee-content">
+            <div class="tech-item">REACT</div>
+            <div class="tech-item">VITE</div>
+            <div class="tech-item">TAILWIND</div>
+            <div class="tech-item">GSAP</div>
+            <div class="tech-item">LENIS</div>
+            <div class="tech-item">FRAMER MOTION</div>
+            <div class="tech-item">SUPABASE</div>
+            <!-- Duplicate for infinite loop -->
+            <div class="tech-item">REACT</div>
+            <div class="tech-item">VITE</div>
+            <div class="tech-item">TAILWIND</div>
+            <div class="tech-item">GSAP</div>
+            <div class="tech-item">LENIS</div>
+            <div class="tech-item">FRAMER MOTION</div>
+            <div class="tech-item">SUPABASE</div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">The Philosophy</h2>
+                <p class="section-subtitle">We don't just build sites; we build high-converting digital environments.</p>
+            </div>
+            <div class="services-grid reveal">
+                <div class="service-card">
+                    <h3 style="color: var(--accent-primary); margin-bottom: var(--spacing-sm);">01. PRECISION</h3>
+                    <p style="color: var(--text-muted);">Meticulous attention to UX detail, clean information architecture, and accessibility. Engineered for high-trust environments and complex conversion goals.</p>
+                </div>
+                <div class="service-card">
+                    <h3 style="color: var(--accent-oxford); margin-bottom: var(--spacing-sm);">02. POWER</h3>
+                    <p style="color: var(--text-muted);">Bold visual storytelling, high-energy animations, and motivational copy. Designed for brands that need to make an immediate, unforgettable impact.</p>
+                </div>
+                <div class="service-card">
+                    <h3 style="color: #4ade80; margin-bottom: var(--spacing-sm);">03. CONVERSION DNA</h3>
+                    <p style="color: var(--text-muted);">Every element is engineered to guide the user toward a single action, whether it's booking a consultation or signing up for a trial.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Selected Works</h2>
+                <p class="section-subtitle">Showcasing the synergy of science and action.</p>
+            </div>
+
+            <div class="project-grid">
+                <!-- Projects are dynamically injected by main.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contact Section -->
+    <footer id="contact" class="footer">
+        <div class="container footer-content">
+            <h2 class="footer-title reveal">Ready to transform your <span class="gradient-text">digital presence?</span></h2>
+            
+            <div class="contact-form-container reveal">
+                <form id="contact-form" class="glass" style="padding: var(--spacing-md); text-align: left;">
+                    <div class="form-group">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-input" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-input" placeholder="Tell us about your project..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Initialize Project</button>
+                    <div class="form-status"></div>
+                </form>
+            </div>
+
+            <div class="footer-bottom" style="margin-top: var(--spacing-xl);">
+                <p>&copy; 2026 Precision & Power Studio. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
