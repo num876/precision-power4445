@@ -1,9 +1,28 @@
-import Lenis from 'lenis';
-import VanillaTilt from 'vanilla-tilt';
-
 // Mobile Detection
 const isMobile = () => window.innerWidth <= 768;
 const isHoverable = window.matchMedia('(hover: hover)').matches;
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+// 1. Smooth Scroll Initialization (Lenis)
+let lenis = null;
+if (!isTouchDevice) {
+    lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 2,
+        infinite: false,
+    });
+
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+}
 
 // Mobile Hero Animations - Trigger on load
 if (isMobile()) {
@@ -118,33 +137,43 @@ if (projectGrid) {
 
 function openModal(project) {
     const modalContent = document.querySelector('.modal-body');
+    const isSmallMobile = window.innerWidth < 480;
+    
     modalContent.innerHTML = `
-        <h2 class="modal-title" style="margin-bottom: var(--spacing-md);">${project.title}</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
-            <div>
-                <h4 style="color: var(--accent-primary); margin-bottom: var(--spacing-xs);">The Problem</h4>
-                <p style="font-size: 0.95rem; color: var(--text-muted);">${project.problem}</p>
+        <h2 class="modal-title" style="margin-bottom: var(--spacing-md); font-size: ${isSmallMobile ? '1.5rem' : '2rem'};">${project.title}</h2>
+        <div class="modal-grid" style="display: grid; grid-template-columns: ${isMobile() ? '1fr' : '1fr 1fr'}; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+            <div class="modal-col">
+                <h4 style="color: var(--accent-primary); margin-bottom: var(--spacing-xs); font-size: 1rem;">The Problem</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">${project.problem}</p>
             </div>
-            <div>
-                <h4 style="color: #4ade80; margin-bottom: var(--spacing-xs);">The Solution</h4>
-                <p style="font-size: 0.95rem; color: var(--text-muted);">${project.solution}</p>
+            <div class="modal-col">
+                <h4 style="color: #4ade80; margin-bottom: var(--spacing-xs); font-size: 1rem;">The Solution</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">${project.solution}</p>
             </div>
         </div>
-        <div style="text-align: center;">
-            <a href="${project.link}" target="_blank" class="btn btn-primary">Visit Live Site</a>
+        <div style="text-align: center; margin-top: var(--spacing-md);">
+            <a href="${project.link}" target="_blank" class="btn btn-primary" style="width: ${isMobile() ? '100%' : 'auto'};">Visit Live Site</a>
         </div>
     `;
     modal.classList.add('active');
+    
+    // Disable scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+    if (lenis) lenis.stop();
 }
 
 // Close Modal
-document.querySelector('.close-modal').addEventListener('click', () => {
+const closeModal = () => {
     modal.classList.remove('active');
-});
+    document.body.style.overflow = '';
+    if (lenis) lenis.start();
+};
+
+document.querySelector('.close-modal').addEventListener('click', closeModal);
 
 if (modal) {
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.remove('active');
+        if (e.target === modal) closeModal();
     });
 }
 
@@ -378,12 +407,17 @@ document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 // Navbar Scroll Effect
 const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
+    const scrollThreshold = isMobile() ? 20 : 50;
+    if (window.scrollY > scrollThreshold) {
         navbar.style.padding = isMobile() ? '0.6rem 0' : '0.8rem 0';
         navbar.style.background = 'hsla(220, 30%, 5%, 0.95)';
+        navbar.style.backdropFilter = 'blur(10px)';
+        navbar.style.borderBottom = '1px solid var(--glass-border)';
     } else {
         navbar.style.padding = isMobile() ? '0.75rem 0' : '1.5rem 0';
         navbar.style.background = 'transparent';
+        navbar.style.backdropFilter = 'none';
+        navbar.style.borderBottom = 'none';
     }
 });
 
