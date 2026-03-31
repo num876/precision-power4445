@@ -5,17 +5,60 @@ import VanillaTilt from 'vanilla-tilt';
 const isMobile = () => window.innerWidth <= 768;
 const isHoverable = window.matchMedia('(hover: hover)').matches;
 
-// 1. Initialize Smooth Scrolling (Lenis) - Disable on mobile for better performance
-const lenis = new Lenis({
-    duration: isMobile() ? 0.8 : 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-});
+// Mobile Hero Animations - Trigger on load
+if (isMobile()) {
+    window.addEventListener('load', () => {
+        const heroTitle = document.getElementById('hero-title');
+        const heroSubtitle = document.getElementById('hero-subtitle');
+        const heroActions = document.getElementById('hero-actions');
+        const badgeContainer = document.getElementById('badge-container');
+        const badgePills = document.querySelectorAll('.badge-pill');
 
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
+        // Stagger animations
+        if (heroTitle) {
+            heroTitle.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards';
+            heroTitle.style.opacity = '1';
+        }
+
+        if (heroSubtitle) {
+            heroSubtitle.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.2s forwards';
+            heroSubtitle.style.opacity = '1';
+        }
+
+        if (badgeContainer) {
+            badgePills.forEach((pill, index) => {
+                pill.style.animation = `bounce-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${0.4 + index * 0.1}s forwards`;
+                pill.style.opacity = '0';
+            });
+        }
+
+        if (heroActions) {
+            heroActions.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards';
+            heroActions.style.opacity = '1';
+        }
+
+        // Add button tap animation
+        const buttons = document.querySelectorAll('.hero-actions .btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+                if (navigator.vibrate) navigator.vibrate(20);
+            });
+            btn.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    });
+
+    // Hide scroll indicator on scroll
+    window.addEventListener('scroll', () => {
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        if (scrollIndicator && window.scrollY > 100) {
+            scrollIndicator.style.opacity = '0';
+            scrollIndicator.style.pointerEvents = 'none';
+        }
+    });
 }
-requestAnimationFrame(raf);
 
 // 2. Project Data with Case Studies (Problem vs Solution)
 const projects = [
@@ -123,6 +166,20 @@ if (isHoverable && !isMobile()) {
         "max-glare": 0.2,
     });
 }
+
+// Mobile-optimized project card interactions
+if (isMobile()) {
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach(card => {
+        card.addEventListener('touchstart', function() {
+            this.style.transform = 'translateY(-8px)';
+            if (navigator.vibrate) navigator.vibrate(15);
+        });
+        card.addEventListener('touchend', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+}
 // 4. Custom Cursor Logic (LERP) - Only if hover is supported and NOT mobile
 const cursorDot = document.querySelector(".cursor-dot");
 const cursorOutline = document.querySelector(".cursor-outline");
@@ -226,6 +283,7 @@ if (contactForm) {
         
         btn.disabled = true;
         btn.innerText = 'Sending...';
+        btn.style.animation = 'button-pulse 1.5s infinite';
         formStatus.innerHTML = '';
 
         // Add haptic feedback on mobile
@@ -237,7 +295,8 @@ if (contactForm) {
         setTimeout(() => {
             btn.disabled = false;
             btn.innerText = originalText;
-            formStatus.innerHTML = '<span class="form-success" style="color: #4ade80;">Message sent successfully! We will contact you soon.</span>';
+            btn.style.animation = 'none';
+            formStatus.innerHTML = '<span class="form-success" style="color: #4ade80; animation: fade-in 0.5s ease;">✓ Message sent successfully! We will contact you soon.</span>';
             contactForm.reset();
 
             // Mobile haptic feedback on success
@@ -246,6 +305,21 @@ if (contactForm) {
             }
         }, 1500);
     });
+
+    // Add hover effects for desktop buttons
+    if (!isMobile()) {
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                if (this.classList.contains('btn-primary')) {
+                    this.style.boxShadow = '0 15px 30px rgba(112, 112, 255, 0.4)';
+                }
+            });
+            btn.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '';
+            });
+        });
+    }
 }
 
 // 6. Reveal Animations
