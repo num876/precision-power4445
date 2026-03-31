@@ -1,3 +1,6 @@
+import Lenis from 'lenis';
+import VanillaTilt from 'vanilla-tilt';
+
 // Mobile Detection
 const isMobile = () => window.innerWidth <= 768;
 const isHoverable = window.matchMedia('(hover: hover)').matches;
