@@ -706,7 +706,11 @@ textarea.form-input {
   /* 3. Hero Section Optimizations */
   .hero {
     padding-top: var(--spacing-lg);
-    min-height: auto;
+    padding-bottom: var(--spacing-lg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .hero-title {
