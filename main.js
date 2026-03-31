@@ -49,15 +49,6 @@ if (isMobile()) {
             });
         });
     });
-
-    // Hide scroll indicator on scroll
-    window.addEventListener('scroll', () => {
-        const scrollIndicator = document.getElementById('scroll-indicator');
-        if (scrollIndicator && window.scrollY > 100) {
-            scrollIndicator.style.opacity = '0';
-            scrollIndicator.style.pointerEvents = 'none';
-        }
-    });
 }
 
 // 2. Project Data with Case Studies (Problem vs Solution)
