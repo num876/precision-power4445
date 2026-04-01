@@ -234,27 +234,17 @@ if (isHoverable && !isMobile() && cursorDot && cursorOutline) {
     });
 }
 
-// 5. Dynamic Hero Parallax & Focus Glow - Only on desktop
+// 5. Hero Focus Glow - Only on desktop
 const hero = document.querySelector('#hero');
-const floatCards = document.querySelectorAll('.hero-float-card');
 const cursorGlow = document.querySelector('.hero-cursor-glow');
 
 if (hero && isHoverable && !isMobile()) {
     hero.addEventListener('mousemove', (e) => {
         const { clientX, clientY } = e;
-        const { innerWidth, innerHeight } = window;
 
         // Move Focus Glow with Smooth Lag
         cursorGlow.style.left = `${clientX}px`;
         cursorGlow.style.top = `${clientY}px`;
-
-        // Move Floating Cards with Parallax
-        floatCards.forEach(card => {
-            const speed = card.getAttribute('data-speed');
-            const x = (innerWidth - clientX * speed) / 100;
-            const y = (innerHeight - clientY * speed) / 100;
-            card.style.transform = `translateX(${x}px) translateY(${y}px)`;
-        });
     });
 }
 
