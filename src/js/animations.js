@@ -6,6 +6,14 @@ export const initRevealAnimations = () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
+                
+                // Phase 3: Staggered child reveals
+                const children = entry.target.querySelectorAll('.reveal-child');
+                children.forEach((child, index) => {
+                    child.style.transitionDelay = `${index * 0.1}s`;
+                    child.classList.add('active');
+                });
+
                 revealObserver.unobserve(entry.target);
             }
         });
@@ -115,4 +123,53 @@ export const initHeroAnimations = () => {
             });
         });
     }
+};
+export const initMagneticButtons = () => {
+    if (isMobile()) return;
+
+    const magneticElements = document.querySelectorAll('.btn, .logo, .nav-links a');
+    
+    magneticElements.forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const { left, top, width, height } = el.getBoundingClientRect();
+            
+            // Calculate center of element relative to viewport
+            const centerX = left + width / 2;
+            const centerY = top + height / 2;
+            
+            // Calculate distance from center
+            const deltaX = clientX - centerX;
+            const deltaY = clientY - centerY;
+            
+            // Magnetic pull strength (adjustable)
+            const strength = 0.3; // Lower = more subtle/stable
+            const x = deltaX * strength;
+            const y = deltaY * strength;
+            
+            // Apply transform relative to current position
+            el.style.transform = `translate(${x}px, ${y}px)`;
+            el.style.zIndex = "100";
+        });
+
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = '';
+            el.style.zIndex = "";
+        });
+    });
+};
+
+/* Phase 7: Mobile Performance - Pause Marquee when not visible */
+export const initMarqueePerformance = () => {
+    const marquee = document.querySelector('.marquee-content');
+    if (!marquee) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            marquee.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+        });
+    }, { threshold: 0.1 });
+
+    const parent = document.querySelector('.tech-marquee');
+    if (parent) observer.observe(parent);
 };

@@ -56,6 +56,7 @@ export const initNavigation = () => {
 
 export const initModals = () => {
     const modal = document.querySelector('#project-modal');
+    const modalContainer = document.querySelector('.modal-container');
     const closeBtn = document.querySelector('.close-modal');
 
     if (!modal) return;
@@ -69,19 +70,23 @@ export const initModals = () => {
         const isSmallMobile = window.innerWidth < 480;
         
         modalContent.innerHTML = `
-            <h2 class="modal-title" style="margin-bottom: var(--spacing-md); font-size: ${isSmallMobile ? '1.5rem' : '2rem'};">${project.title}</h2>
-            <div class="modal-grid" style="display: grid; grid-template-columns: ${isMobile() ? '1fr' : '1fr 1fr'}; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+            <div class="modal-category" style="color: ${project.color}; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">${project.category}</div>
+            <h2 class="modal-title" style="margin-bottom: var(--spacing-sm); font-size: ${isSmallMobile ? '1.5rem' : '2rem'};">${project.title}</h2>
+            <p style="font-size: 1rem; color: var(--text-main); line-height: 1.6; margin-bottom: var(--spacing-md); opacity: 0.9;">${project.description}</p>
+            
+            <div class="modal-grid" style="display: grid; grid-template-columns: ${isMobile() ? '1fr' : '1fr 1fr'}; gap: var(--spacing-md); margin-bottom: var(--spacing-lg); background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border);">
                 <div class="modal-col">
-                    <h4 style="color: var(--accent-primary); margin-bottom: var(--spacing-xs); font-size: 1rem;">The Problem</h4>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">${project.problem}</p>
+                    <h4 style="color: var(--accent-primary); margin-bottom: var(--spacing-xs); font-size: 0.9rem; text-transform: uppercase;">The Challenge</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">${project.problem}</p>
                 </div>
                 <div class="modal-col">
-                    <h4 style="color: #4ade80; margin-bottom: var(--spacing-xs); font-size: 1rem;">The Solution</h4>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">${project.solution}</p>
+                    <h4 style="color: #4ade80; margin-bottom: var(--spacing-xs); font-size: 0.9rem; text-transform: uppercase;">Technical Capacity</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">${project.solution}</p>
                 </div>
             </div>
+
             <div style="text-align: center; margin-top: var(--spacing-md);">
-                <a href="${project.link}" target="_blank" class="btn btn-primary" style="width: ${isMobile() ? '100%' : 'auto'};">Visit Live Site</a>
+                <a href="${project.link}" target="_blank" class="btn btn-primary" style="width: ${isMobile() ? '100%' : 'auto'};">Explore Live Architecture</a>
             </div>
         `;
         modal.classList.add('active');
@@ -99,6 +104,24 @@ export const initModals = () => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
+
+    if (modalContainer) {
+        let touchStartY = 0;
+        
+        modal.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        modal.addEventListener('touchend', (e) => {
+            const touchEndY = e.changedTouches[0].clientY;
+            const swipeDistance = touchEndY - touchStartY;
+            
+            // Close if swipe distance is > 100px and we are at the top of the modal
+            if (swipeDistance > 100 && modalContainer.scrollTop <= 0) {
+                closeModal();
+            }
+        }, { passive: true });
+    }
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();

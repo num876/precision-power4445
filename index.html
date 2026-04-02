@@ -12,6 +12,12 @@
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
 
+    <!-- Phase 6: Floating Status UI -->
+    <div class="status-badge" id="status-badge">
+        <span class="status-dot"></span>
+        <span class="status-text">Availability: Specialized Intake Open</span>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar glass">
         <div class="container navbar-inner">
@@ -19,8 +25,9 @@
             
             <!-- Desktop Links -->
             <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#services">Automation</a>
                 <a href="#projects">Work</a>
-                <a href="#services">About</a>
                 <a href="#contact" class="btn btn-outline btn-sm">Contact</a>
             </div>
 
@@ -35,8 +42,9 @@
 
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+        <a href="#about" class="mobile-link">About</a>
+        <a href="#services" class="mobile-link">Automation</a>
         <a href="#projects" class="mobile-link">Work</a>
-        <a href="#services" class="mobile-link">About</a>
         <a href="#contact" class="mobile-link">Contact</a>
     </div>
 
@@ -56,8 +64,8 @@
 
         <div class="container hero-content">
             <div class="hero-accent-line" id="hero-accent-line"></div>
-            <h1 class="hero-title hero-title-mobile" id="hero-title">Where Precision Meets <span class="gradient-text-animate">Power.</span></h1>
-            <p class="hero-subtitle hero-subtitle-mobile" id="hero-subtitle">Specializing in high-performance landing pages designed for elite conversion and visual excellence.</p>
+            <h1 class="hero-title hero-title-mobile" id="hero-title">Automating Conversion with <span class="gradient-text-animate">Precision & Power.</span></h1>
+            <p class="hero-subtitle hero-subtitle-mobile" id="hero-subtitle">We build high-performance AI agents and high-conversion landing pages that transform cold traffic into confirmed appointments.</p>
             
 
             <div class="hero-actions hero-actions-mobile" id="hero-actions">
@@ -70,20 +78,20 @@
     <!-- Tech Marquee -->
     <div class="tech-marquee reveal">
         <div class="marquee-content">
+            <div class="tech-item">AI AGENTS</div>
+            <div class="tech-item">HIGH-CONVERSION</div>
             <div class="tech-item">REACT</div>
-            <div class="tech-item">VITE</div>
-            <div class="tech-item">TAILWIND</div>
+            <div class="tech-item">AUTONOMOUS</div>
             <div class="tech-item">GSAP</div>
-            <div class="tech-item">LENIS</div>
-            <div class="tech-item">FRAMER MOTION</div>
+            <div class="tech-item">NLP</div>
             <div class="tech-item">SUPABASE</div>
             <!-- Duplicate for infinite loop -->
+            <div class="tech-item">AI AGENTS</div>
+            <div class="tech-item">HIGH-CONVERSION</div>
             <div class="tech-item">REACT</div>
-            <div class="tech-item">VITE</div>
-            <div class="tech-item">TAILWIND</div>
+            <div class="tech-item">AUTONOMOUS</div>
             <div class="tech-item">GSAP</div>
-            <div class="tech-item">LENIS</div>
-            <div class="tech-item">FRAMER MOTION</div>
+            <div class="tech-item">NLP</div>
             <div class="tech-item">SUPABASE</div>
         </div>
     </div>
@@ -92,24 +100,98 @@
     <section id="services" class="services">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="section-title">The Philosophy</h2>
-                <p class="section-subtitle">We don't just build sites; we build high-converting digital environments.</p>
+                <h2 class="section-title">The Automation <span class="gradient-text">DNA</span></h2>
+                <p class="section-subtitle">We don't just build sites; we build autonomous revenue engines.</p>
             </div>
             <div class="services-grid reveal">
-                <div class="service-card">
-                    <h3 style="color: var(--accent-primary); margin-bottom: var(--spacing-sm);">01. PRECISION</h3>
-                    <p style="color: var(--text-muted); margin-bottom: var(--spacing-md);">Meticulous attention to UX detail, clean information architecture, and accessibility. Engineered for high-trust environments and complex conversion goals.</p>
-                    <a href="https://v0-lumina-dental-landing-page-blond.vercel.app/" target="_blank" class="btn btn-outline btn-sm" style="font-size: 0.8rem; padding: 6px 16px;">View Live Studio</a>
+                <div class="service-card service-card-wide">
+                    <div>
+                        <h3 style="color: var(--accent-primary); margin-bottom: var(--spacing-sm); font-size: 1.8rem;">High-Conversion Landing Pages.</h3>
+                        <p style="color: var(--text-muted); margin-bottom: var(--spacing-md); max-width: 500px;">Strategic aesthetics meets performance-driven deployment logic. We engineer landing pages that resonate emotionally while performing mathematically.</p>
+                    </div>
+                    <a href="#projects" class="btn btn-outline btn-sm" style="align-self: flex-start;">Explore The Lab</a>
                 </div>
                 <div class="service-card">
-                    <h3 style="color: var(--accent-oxford); margin-bottom: var(--spacing-sm);">02. POWER</h3>
-                    <p style="color: var(--text-muted); margin-bottom: var(--spacing-md);">Bold visual storytelling, high-energy animations, and motivational copy. Designed for brands that need to make an immediate, unforgettable impact.</p>
-                    <a href="https://v0-website-improvement-suggestions-tau.vercel.app/" target="_blank" class="btn btn-outline btn-sm" style="font-size: 0.8rem; padding: 6px 16px;">View Live Academy</a>
+                    <div>
+                        <h3 style="color: var(--accent-oxford); margin-bottom: var(--spacing-sm);">Autonomous Agents.</h3>
+                        <p style="color: var(--text-muted); margin-bottom: var(--spacing-md);">AI-driven chatbots that handle FAQs and Appointment Bookings 24/7 with zero overhead.</p>
+                    </div>
+                    <a href="#contact" class="btn btn-outline btn-sm">Deploy Agent</a>
                 </div>
                 <div class="service-card">
-                    <h3 style="color: #4ade80; margin-bottom: var(--spacing-sm);">03. CONVERSION DNA</h3>
-                    <p style="color: var(--text-muted); margin-bottom: var(--spacing-md);">Every element is engineered to guide the user toward a single action, whether it's booking a consultation or signing up for a trial.</p>
-                    <a href="#contact" class="btn btn-outline btn-sm" style="font-size: 0.8rem; padding: 6px 16px;">Initialize Conversion</a>
+                    <div>
+                        <h3 style="color: #4ade80; margin-bottom: var(--spacing-sm);">Strategic Yield.</h3>
+                        <p style="color: var(--text-muted); margin-bottom: var(--spacing-md);">Engineering the neural funnel to automate client qualification and growth.</p>
+                    </div>
+                    <a href="#contact" class="btn btn-outline btn-sm">Initialize Automation</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phase 6: The Process Laboratory -->
+    <section id="process" class="process-lab reveal">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">The Process <span class="gradient-text">Laboratory</span></h2>
+                <p class="section-subtitle">Transforming raw concepts into high-stakes digital assets.</p>
+            </div>
+            <div class="process-grid reveal">
+                <div class="process-item reveal-child">
+                    <div class="process-step-num">01</div>
+                    <h4 style="margin-bottom: 5px;">Logic Mapping</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">We map your existing FAQs and booking systems to a neural automation framework.</p>
+                </div>
+                <div class="process-item reveal-child">
+                    <div class="process-step-num">02</div>
+                    <h4 style="margin-bottom: 5px;">Conversion-First Prototype</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Engineering the high-aesthetic landing page while we train your autonomous agent.</p>
+                </div>
+                <div class="process-item reveal-child">
+                    <div class="process-step-num">03</div>
+                    <h4 style="margin-bottom: 5px;">Automated Scale</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Full-scale deployment with recursive optimization for lead capture.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phase 7: The Digital Front Desk (About Me) -->
+    <section id="about" class="about-me reveal">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image-column reveal-child">
+                    <div class="about-image-wrapper glass">
+                        <img src="./assets/numayr-malik.jpg" alt="Numayr Malik - Full-Stack AI Engineer" class="about-img">
+                        <div class="location-tag">
+                            <span class="pulse-dot"></span>
+                            OXFORD, UK // AI-NATIVE STACK
+                        </div>
+                    </div>
+                </div>
+                <div class="about-content-column reveal-child">
+                    <div class="section-label">THE ARCHITECT</div>
+                    <h2 class="about-title">Hi, I'm <span class="gradient-text">Numayr Malik.</span></h2>
+                    <p class="about-lead">I build the <strong>"Digital Front Desk"</strong> that runs your business while you sleep.</p>
+                    
+                    <p class="about-bio">I am a Full-Stack AI Engineer and Automation Specialist based in Oxford, UK. I specialize in a modern development movement called <strong>"Vibecoding"</strong>—leveraging a high-speed, AI-native stack (v0, Antigravity, Bolt, and Supabase) to ship production-ready software in days, not months.</p>
+
+                    <div class="expertise-row">
+                        <div class="expertise-item">
+                            <h4 style="color: var(--accent-primary); margin-bottom: 5px;">AI Solutions Architecture</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">I engineer intelligent systems (using Voiceflow) that handle 24/7 client booking, FAQ responses, and lead filtering.</p>
+                        </div>
+                        <div class="expertise-item">
+                            <h4 style="color: var(--accent-oxford); margin-bottom: 5px;">Database & Logic</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">I design secure, real-time PostgreSQL backends (with Supabase) that capture and manage every single member or patient lead.</p>
+                        </div>
+                    </div>
+
+                    <div class="outcome-box glass">
+                        <h4 style="margin-bottom: 10px; font-size: 0.95rem;">THE OUTCOME</h4>
+                        <p style="font-size: 0.95rem; line-height: 1.5;">I replace manual signup friction with an autonomous engine, saving business owners <strong>10+ hours of admin work per week.</strong> Stop losing revenue to manual processes.</p>
+                        <a href="#contact" class="btn btn-primary" style="margin-top: 15px;">Automate Your Intake This Week</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,20 +217,27 @@
             <h2 class="footer-title reveal">Ready to transform your <span class="gradient-text">digital presence?</span></h2>
             
             <div class="contact-form-container reveal">
-                <form id="contact-form" class="glass" style="padding: var(--spacing-md); text-align: left;">
-                    <div class="form-group">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-input" placeholder="Your Name" required>
+                <div class="form-progress-bar reveal-child">
+                    <div class="progress-step active" data-step="1">Info</div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step" data-step="2">Details</div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step" data-step="3">Initialize</div>
+                </div>
+                <form id="contact-form" class="glass reveal-child" style="padding: var(--spacing-md); text-align: left;">
+                    <div class="form-group reveal-child">
+                        <label class="form-label">Client / Organization Identity</label>
+                        <input type="text" class="form-input" placeholder="Name / Firm" required>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-input" placeholder="your@email.com" required>
+                    <div class="form-group reveal-child">
+                        <label class="form-label">Strategic Contact Point</label>
+                        <input type="email" class="form-input" placeholder="neural@link.com" required>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Message</label>
-                        <textarea class="form-input" placeholder="Tell us about your project..."></textarea>
+                    <div class="form-group reveal-child">
+                        <label class="form-label">Project Intelligence & Conversion Goals</label>
+                        <textarea class="form-input" placeholder="What are the mission-critical objectives?"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Initialize Project</button>
+                    <button type="submit" class="btn btn-primary reveal-child" style="width: 100%;">Initialize Diagnostic</button>
                     <div class="form-status"></div>
                 </form>
             </div>
@@ -168,6 +257,13 @@
             </div>
         </div>
     </div>
+
+    <!-- Grain Filter (Phase 1) -->
+    <svg style="display:none;">
+        <filter id="noiseFilter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" stitchTiles="stitch" />
+        </filter>
+    </svg>
 
     <script type="module" src="./main.js"></script>
 </body>

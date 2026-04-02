@@ -16,7 +16,9 @@ import {
     initCustomCursor, 
     initHeroEffects, 
     initTilts,
-    initHeroAnimations
+    initHeroAnimations,
+    initMagneticButtons,
+    initMarqueePerformance
 } from './src/js/animations.js';
 import { initContactForm } from './src/js/forms.js';
 
@@ -38,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeroEffects();
     initTilts(); 
     initHeroAnimations();
+    initMagneticButtons();
+    initMarqueePerformance();
     
     // 5. Functional components
     initContactForm();
