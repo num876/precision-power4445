@@ -1,425 +1,67 @@
-import Lenis from 'lenis';
-import VanillaTilt from 'vanilla-tilt';
+/**
+ * Precision & Power - Main Entry Point
+ * -----------------------------------
+ * This file serves as the main orchestrator, importing and initializing
+ * all functional modules for the portfolio.
+ */
 
-// Mobile Detection
-const isMobile = () => window.innerWidth <= 768;
-const isHoverable = window.matchMedia('(hover: hover)').matches;
-const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+import { initScroll } from './src/js/scroll.js';
+import { renderProjects } from './src/js/projects.js';
+import { 
+    initNavigation, 
+    initModals 
+} from './src/js/ui.js';
+import { 
+    initRevealAnimations, 
+    initCustomCursor, 
+    initHeroEffects, 
+    initTilts,
+    initHeroAnimations
+} from './src/js/animations.js';
+import { initContactForm } from './src/js/forms.js';
 
-// 1. Smooth Scroll Initialization (Lenis)
-let lenis = null;
-if (!isTouchDevice) {
-    lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        touchMultiplier: 2,
-        infinite: false,
-    });
+// Initialize all modules once the DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Core behavior
+    initScroll();
+    
+    // 2. Data management & rendering
+    renderProjects();
+    
+    // 3. UI logic
+    initNavigation();
+    initModals();
+    
+    // 4. Visual effects & animations
+    initRevealAnimations();
+    initCustomCursor();
+    initHeroEffects();
+    initTilts(); 
+    initHeroAnimations();
+    
+    // 5. Functional components
+    initContactForm();
 
-    function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-}
-
-// Mobile Hero Animations - Trigger on load
-if (isMobile()) {
-    window.addEventListener('load', () => {
-        const heroTitle = document.getElementById('hero-title');
-        const heroSubtitle = document.getElementById('hero-subtitle');
-        const heroActions = document.getElementById('hero-actions');
-        const badgeContainer = document.getElementById('badge-container');
-        const badgePills = document.querySelectorAll('.badge-pill');
-
-        // Stagger animations
-        if (heroTitle) {
-            heroTitle.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards';
-            heroTitle.style.opacity = '1';
-        }
-
-        if (heroSubtitle) {
-            heroSubtitle.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.2s forwards';
-            heroSubtitle.style.opacity = '1';
-        }
-
-        if (badgeContainer) {
-            badgePills.forEach((pill, index) => {
-                pill.style.animation = `bounce-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${0.4 + index * 0.1}s forwards`;
-                pill.style.opacity = '0';
-            });
-        }
-
-        if (heroActions) {
-            heroActions.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards';
-            heroActions.style.opacity = '1';
-        }
-
-        // Add button tap animation
-        const buttons = document.querySelectorAll('.hero-actions .btn');
-        buttons.forEach(btn => {
-            btn.addEventListener('touchstart', function() {
-                this.style.transform = 'scale(0.98)';
-                if (navigator.vibrate) navigator.vibrate(20);
-            });
-            btn.addEventListener('touchend', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
-    });
-}
-
-// 2. Project Data with Case Studies (Problem vs Solution)
-const projects = [
-    {
-        id: "lumina",
-        title: "Lumina Dental Studio",
-        category: "Medical & Wellness",
-        description: "A fear-free dentistry landing page designed with a calm, high-end 'medical spa' aesthetic.",
-        problem: "Traditional dental websites feel cold, clinical, and anxiety-inducing, often leading to patient dropout before booking.",
-        solution: "We created a 'Spa-like' digital experience using soft salmon palettes and human-centric imagery to shift the perception from 'clinical necessity' to 'wellness indulgence'.",
-        tags: ["React", "Tailwind", "Framer Motion"],
-        image: "./assets/lumina-mockup.png",
-        link: "https://v0-lumina-dental-landing-page-blond.vercel.app/",
-        color: "var(--accent-lumina)"
-    },
-    {
-        id: "oxford",
-        title: "Oxford Wrestling Academy",
-        category: "Athletics & Training",
-        description: "A bold, high-energy platform for elite freestyle and Greco-Roman wrestling.",
-        problem: "Wrestling academies often rely on outdated, static sites that fail to convey the prestige, intensity, and discipline of the sport.",
-        solution: "Implemented a high-contrast UI with industrial typography and aggressive orange accents to mirror the academy's 'Champions are Forged' philosophy.",
-        tags: ["React", "Tailwind", "GSAP"],
-        image: "./assets/oxford-mockup.png",
-        link: "https://v0-website-improvement-suggestions-tau.vercel.app/",
-        color: "var(--accent-oxford)"
-    }
-];
-
-// 3. Dynamic Project Rendering & Modal Logic
-const projectGrid = document.querySelector('.project-grid');
-const modal = document.querySelector('#project-modal');
-
-if (projectGrid) {
-    projectGrid.innerHTML = projects.map(project => `
-        <article class="project-card reveal" data-tilt data-id="${project.id}">
-            <div class="project-image-link" style="cursor: pointer;">
-                <div class="project-image-container">
-                    <img src="${project.image}" alt="${project.title}" class="project-img">
-                    <div class="project-overlay">
-                        <span class="btn btn-primary btn-sm">View Case Study</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-info">
-                <div class="project-category" style="color: ${project.color};">${project.category}</div>
-                <h3 class="project-title">${project.title}</h3>
-                <p class="project-desc">${project.description}</p>
-                <div class="project-tags">
-                    ${project.tags.map(tag => `<span>${tag}</span>`).join('')}
-                </div>
-            </div>
-        </article>
-    `).join('');
-
-    // Handle Project Clicks (Modals)
-    document.querySelectorAll('.project-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            if (e.target.closest('.project-image-link')) {
-                const project = projects.find(p => p.id === card.dataset.id);
-                openModal(project);
+    // Delegate project clicks for dynamic content
+    const projectGrid = document.querySelector('.project-grid');
+    if (projectGrid) {
+        projectGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.project-card');
+            const imageLink = e.target.closest('.project-image-link');
+            
+            if (card && imageLink && window.openProjectModal) {
+                window.openProjectModal(card.dataset.id);
             }
         });
-    });
-}
-
-function openModal(project) {
-    const modalContent = document.querySelector('.modal-body');
-    const isSmallMobile = window.innerWidth < 480;
-    
-    modalContent.innerHTML = `
-        <h2 class="modal-title" style="margin-bottom: var(--spacing-md); font-size: ${isSmallMobile ? '1.5rem' : '2rem'};">${project.title}</h2>
-        <div class="modal-grid" style="display: grid; grid-template-columns: ${isMobile() ? '1fr' : '1fr 1fr'}; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
-            <div class="modal-col">
-                <h4 style="color: var(--accent-primary); margin-bottom: var(--spacing-xs); font-size: 1rem;">The Problem</h4>
-                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">${project.problem}</p>
-            </div>
-            <div class="modal-col">
-                <h4 style="color: #4ade80; margin-bottom: var(--spacing-xs); font-size: 1rem;">The Solution</h4>
-                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">${project.solution}</p>
-            </div>
-        </div>
-        <div style="text-align: center; margin-top: var(--spacing-md);">
-            <a href="${project.link}" target="_blank" class="btn btn-primary" style="width: ${isMobile() ? '100%' : 'auto'};">Visit Live Site</a>
-        </div>
-    `;
-    modal.classList.add('active');
-    
-    // Disable scrolling when modal is open
-    document.body.style.overflow = 'hidden';
-    if (lenis) lenis.stop();
-}
-
-// Close Modal
-const closeModal = () => {
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-    if (lenis) lenis.start();
-};
-
-document.querySelector('.close-modal').addEventListener('click', closeModal);
-
-if (modal) {
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
-}
-
-// Initialize Tilts after rendering - Only if hover is supported
-if (isHoverable && !isMobile()) {
-    VanillaTilt.init(document.querySelectorAll(".project-card"), {
-        max: 15,
-        speed: 400,
-        glare: true,
-        "max-glare": 0.2,
-    });
-}
-
-// Mobile-optimized project card interactions
-if (isMobile()) {
-    const projectCards = document.querySelectorAll('.project-card');
-    projectCards.forEach(card => {
-        card.addEventListener('touchstart', function() {
-            this.style.transform = 'translateY(-8px)';
-            if (navigator.vibrate) navigator.vibrate(15);
-        });
-        card.addEventListener('touchend', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
-}
-// 4. Custom Cursor Logic (LERP) - Only if hover is supported and NOT mobile
-const cursorDot = document.querySelector(".cursor-dot");
-const cursorOutline = document.querySelector(".cursor-outline");
-
-if (isHoverable && !isMobile() && cursorDot && cursorOutline) {
-    window.addEventListener("mousemove", (e) => {
-        const posX = e.clientX;
-        const posY = e.clientY;
-
-        cursorDot.style.left = `${posX}px`;
-        cursorDot.style.top = `${posY}px`;
-
-        cursorOutline.animate({
-            left: `${posX}px`,
-            top: `${posY}px`
-        }, { duration: 500, fill: "forwards" });
-    });
-
-    // Cursor Interactions
-    document.querySelectorAll('a, button, .project-card').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
-            cursorOutline.style.background = 'hsla(240, 100%, 70%, 0.1)';
-        });
-        el.addEventListener('mouseleave', () => {
-            cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
-            cursorOutline.style.background = 'transparent';
-        });
-    });
-}
-
-// 5. Hero Focus Glow - Only on desktop
-const hero = document.querySelector('#hero');
-const cursorGlow = document.querySelector('.hero-cursor-glow');
-
-if (hero && isHoverable && !isMobile()) {
-    hero.addEventListener('mousemove', (e) => {
-        const { clientX, clientY } = e;
-
-        // Move Focus Glow with Smooth Lag
-        cursorGlow.style.left = `${clientX}px`;
-        cursorGlow.style.top = `${clientY}px`;
-    });
-}
-
-// 6. Mobile Menu Logic with Full Enhancements
-const hamburger = document.querySelector('.hamburger');
-const mobileMenu = document.querySelector('.mobile-menu');
-const mobileLinks = document.querySelectorAll('.mobile-link');
-
-if (hamburger && mobileMenu) {
-    // Hamburger click handler with haptic feedback
-    hamburger.addEventListener('click', (e) => {
-        e.preventDefault();
-        const isOpen = mobileMenu.classList.contains('active');
-        
-        // Toggle menu
-        mobileMenu.classList.toggle('active');
-        hamburger.classList.toggle('open');
-        
-        // Update ARIA attributes
-        hamburger.setAttribute('aria-expanded', !isOpen);
-        
-        // Haptic feedback on tap
-        if (navigator.vibrate) {
-            navigator.vibrate(isOpen ? 30 : [20, 10, 20]);
-        }
-    });
-
-    // Staggered link animations on menu open
-    mobileLinks.forEach((link, index) => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // Get href for smooth scroll
-            const href = link.getAttribute('href');
-            
-            // Haptic feedback
-            if (navigator.vibrate) navigator.vibrate(15);
-            
-            // Close menu
-            mobileMenu.classList.remove('active');
-            hamburger.classList.remove('open');
-            hamburger.setAttribute('aria-expanded', 'false');
-            
-            // Smooth scroll to target after menu closes
-            setTimeout(() => {
-                const target = document.querySelector(href);
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }, 300);
-        });
-
-        // Enhanced touch feedback with scale
-        link.addEventListener('touchstart', function() {
-            this.style.transform = 'scale(0.95)';
-            if (navigator.vibrate) navigator.vibrate(10);
-        });
-
-        link.addEventListener('touchend', function() {
-            this.style.transform = 'scale(1)';
-        });
-
-        // Focus state styling
-        link.addEventListener('focus', function() {
-            this.style.boxShadow = 'inset 0 0 12px rgba(112, 112, 255, 0.2)';
-        });
-
-        link.addEventListener('blur', function() {
-            this.style.boxShadow = '';
-        });
-    });
-
-    // Close menu on outside click
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.hamburger') && !e.target.closest('.mobile-menu')) {
-            mobileMenu.classList.remove('active');
-            hamburger.classList.remove('open');
-            hamburger.setAttribute('aria-expanded', 'false');
-        }
-    });
-
-    // Close menu on Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-            mobileMenu.classList.remove('active');
-            hamburger.classList.remove('open');
-            hamburger.setAttribute('aria-expanded', 'false');
-            hamburger.focus();
-        }
-    });
-}
-
-// 5. Functional Contact Form Simulation
-const contactForm = document.querySelector('#contact-form');
-const formStatus = document.querySelector('.form-status');
-
-if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = contactForm.querySelector('button');
-        const originalText = btn.innerText;
-        
-        btn.disabled = true;
-        btn.innerText = 'Sending...';
-        btn.style.animation = 'button-pulse 1.5s infinite';
-        formStatus.innerHTML = '';
-
-        // Add haptic feedback on mobile
-        if (isMobile() && navigator.vibrate) {
-            navigator.vibrate(50);
-        }
-
-        // Simulate functional API call
-        setTimeout(() => {
-            btn.disabled = false;
-            btn.innerText = originalText;
-            btn.style.animation = 'none';
-            formStatus.innerHTML = '<span class="form-success" style="color: #4ade80; animation: fade-in 0.5s ease;">✓ Message sent successfully! We will contact you soon.</span>';
-            contactForm.reset();
-
-            // Mobile haptic feedback on success
-            if (isMobile() && navigator.vibrate) {
-                navigator.vibrate([100, 50, 100]);
-            }
-        }, 1500);
-    });
-
-    // Add hover effects for desktop buttons
-    if (!isMobile()) {
-        const buttons = document.querySelectorAll('.btn');
-        buttons.forEach(btn => {
-            btn.addEventListener('mouseenter', function() {
-                if (this.classList.contains('btn-primary')) {
-                    this.style.boxShadow = '0 15px 30px rgba(112, 112, 255, 0.4)';
-                }
-            });
-            btn.addEventListener('mouseleave', function() {
-                this.style.boxShadow = '';
-            });
-        });
     }
-}
 
-// 6. Reveal Animations
-const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('active');
+    // Handle global resize events for dynamic layout adjustments if needed
+    let lastWidth = window.innerWidth;
+    window.addEventListener('resize', () => {
+        const currentWidth = window.innerWidth;
+        if ((lastWidth <= 768 && currentWidth > 768) || (lastWidth > 768 && currentWidth <= 768)) {
+            // Potential reload or logic toggle for responsive transitions
+            lastWidth = currentWidth;
+        }
     });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-// Navbar Scroll Effect
-const navbar = document.querySelector('.navbar');
-window.addEventListener('scroll', () => {
-    const scrollThreshold = isMobile() ? 20 : 50;
-    if (window.scrollY > scrollThreshold) {
-        navbar.style.padding = isMobile() ? '0.6rem 0' : '0.8rem 0';
-        navbar.style.background = 'hsla(220, 30%, 5%, 0.95)';
-        navbar.style.backdropFilter = 'blur(10px)';
-        navbar.style.borderBottom = '1px solid var(--glass-border)';
-    } else {
-        navbar.style.padding = isMobile() ? '0.75rem 0' : '1.5rem 0';
-        navbar.style.background = 'transparent';
-        navbar.style.backdropFilter = 'none';
-        navbar.style.borderBottom = 'none';
-    }
-});
-
-// Handle Resize Events for Mobile/Desktop Transitions
-let lastWindowSize = window.innerWidth;
-window.addEventListener('resize', () => {
-    const currentWindowSize = window.innerWidth;
-    if ((lastWindowSize <= 768 && currentWindowSize > 768) || (lastWindowSize > 768 && currentWindowSize <= 768)) {
-        // Reload scripts if transitioning between mobile and desktop
-        lastWindowSize = currentWindowSize;
-    }
 });
