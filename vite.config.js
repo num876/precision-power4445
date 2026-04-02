@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/precision-power99888/',
+  base: '/precision-power4445/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
