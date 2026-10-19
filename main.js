@@ -9,7 +9,8 @@ import { initScroll } from './src/js/scroll.js';
 import { renderProjects } from './src/js/projects.js';
 import { 
     initNavigation, 
-    initModals 
+    initModals,
+    initFAQAccordion
 } from './src/js/ui.js';
 import { 
     initRevealAnimations, 
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. UI logic
     initNavigation();
     initModals();
+    initFAQAccordion();
     
     // 4. Visual effects & animations
     initRevealAnimations();

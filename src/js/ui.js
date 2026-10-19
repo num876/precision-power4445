@@ -76,17 +76,17 @@ export const initModals = () => {
             
             <div class="modal-grid" style="display: grid; grid-template-columns: ${isMobile() ? '1fr' : '1fr 1fr'}; gap: var(--spacing-md); margin-bottom: var(--spacing-lg); background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border);">
                 <div class="modal-col">
-                    <h4 style="color: var(--accent-primary); margin-bottom: var(--spacing-xs); font-size: 0.9rem; text-transform: uppercase;">The Challenge</h4>
+                    <h4 style="color: var(--accent-primary); margin-bottom: var(--spacing-xs); font-size: 0.9rem; text-transform: uppercase;">Project Challenge</h4>
                     <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">${project.problem}</p>
                 </div>
                 <div class="modal-col">
-                    <h4 style="color: #4ade80; margin-bottom: var(--spacing-xs); font-size: 0.9rem; text-transform: uppercase;">Technical Capacity</h4>
+                    <h4 style="color: #4ade80; margin-bottom: var(--spacing-xs); font-size: 0.9rem; text-transform: uppercase;">Delivered Solution</h4>
                     <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">${project.solution}</p>
                 </div>
             </div>
 
             <div style="text-align: center; margin-top: var(--spacing-md);">
-                <a href="${project.link}" target="_blank" class="btn btn-primary" style="width: ${isMobile() ? '100%' : 'auto'};">Explore Live Architecture</a>
+                <a href="${project.link}" target="_blank" class="btn btn-primary" style="width: ${isMobile() ? '100%' : 'auto'};">Visit Live Website &rarr;</a>
             </div>
         `;
         modal.classList.add('active');
@@ -125,5 +125,30 @@ export const initModals = () => {
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+    });
+};
+
+export const initFAQAccordion = () => {
+    const faqItems = document.querySelectorAll('.faq-item');
+    if (!faqItems.length) return;
+
+    faqItems.forEach(item => {
+        const trigger = item.querySelector('.faq-trigger');
+        if (!trigger) return;
+
+        trigger.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            
+            faqItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.faq-trigger')?.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            item.classList.toggle('active', !isActive);
+            trigger.setAttribute('aria-expanded', !isActive);
+            hapticFeedback(15);
+        });
     });
 };

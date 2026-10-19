@@ -26,7 +26,7 @@ export const initContactForm = () => {
             btn.innerText = originalText;
             btn.style.animation = 'none';
             if (formStatus) {
-                formStatus.innerHTML = '<span class="form-success" style="color: #4ade80; animation: fade-in 0.5s ease;">✓ Message sent successfully! We will contact you soon.</span>';
+                formStatus.innerHTML = '<span class="form-success" style="color: #4ade80; animation: fade-in 0.5s ease;">✓ Message received! I will review your project details and get back to you within 24 hours.</span>';
             }
             contactForm.reset();
             hapticFeedback([100, 50, 100]);
