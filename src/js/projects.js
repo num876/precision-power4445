@@ -50,6 +50,19 @@ export const projects = [
         image: "./assets/lexis-mockup.png",
         link: "https://v0-lexis-ai-backend-ruddy.vercel.app/",
         color: "#3b82f6"
+    },
+    {
+        id: "counter-combat",
+        title: "Counter Combat Club",
+        category: "Martial Arts & Combat Sports",
+        result: "Direct Trial Booking Flow",
+        description: "A high-octane, mobile-first academy website for Birmingham's premier Sambo and MMA training centre, engineered for instant trial sign-ups via phone and WhatsApp.",
+        problem: "Traditional combat sports websites suffer from cluttered layouts, buried timetables, and slow contact forms that deter prospective students.",
+        solution: "Designed a high-contrast, action-packed visual presence with prominent coach credentials, clear class schedules, and single-tap trial booking.",
+        tags: ["Next.js", "Sports Web Design", "Tailwind CSS", "Mobile-First"],
+        image: "./assets/counter-combat-mockup.png",
+        link: "https://counter-combat-club.vercel.app/",
+        color: "#ef4444"
     }
 ];
 
