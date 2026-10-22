@@ -24,6 +24,19 @@ export const projects = [
         image: "./assets/oxford-mockup.png",
         link: "https://v0-website-improvement-suggestions-tau.vercel.app/",
         color: "var(--accent-oxford)"
+    },
+    {
+        id: "contextly",
+        title: "Contextly",
+        category: "AI SaaS & Outreach Platform",
+        result: "Automated Lead Intelligence",
+        description: "An AI-powered sales intelligence web application that analyzes prospect URLs to generate hyper-personalized cold outreach emails and book client meetings.",
+        problem: "Generic cold outreach suffers from low open and reply rates, while manually researching prospect websites and writing custom pitches takes hours.",
+        solution: "Engineered a streamlined, conversion-first web application interface featuring live URL website scraping, AI personalization pipelines, and real-time Supabase data persistence.",
+        tags: ["Next.js", "AI Integration", "Supabase", "SaaS UI"],
+        image: "./assets/contextly-mockup.png",
+        link: "https://v0-contextly-alpha.vercel.app/",
+        color: "#818cf8"
     }
 ];
 
