@@ -63,6 +63,19 @@ export const projects = [
         image: "./assets/counter-combat-mockup.png",
         link: "https://counter-combat-club.vercel.app/",
         color: "#ef4444"
+    },
+    {
+        id: "forma",
+        title: "Forma",
+        category: "Sports Media & Neobrutalist Web Platform",
+        result: "Live Scores & Historical Archives",
+        description: "A bold neobrutalist digital publication and web application dedicated to football culture, live fixture telemetry, breaking news, and tactical history.",
+        problem: "Mainstream sports media sites are overwhelmed with intrusive ads, sluggish trackers, and cluttered navigation that disrupt reading.",
+        solution: "Engineered an aesthetic neobrutalist web app featuring real-time match scoreboards, crisp editorial typography, and high-speed archival exploration.",
+        tags: ["Next.js", "Neobrutalism", "Tailwind CSS", "Live Scores"],
+        image: "./assets/forma-mockup.png",
+        link: "https://forma-two-navy.vercel.app/",
+        color: "#fbbf24"
     }
 ];
 
