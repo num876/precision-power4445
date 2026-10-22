@@ -76,6 +76,19 @@ export const projects = [
         image: "./assets/forma-mockup.png",
         link: "https://forma-two-navy.vercel.app/",
         color: "#fbbf24"
+    },
+    {
+        id: "coms",
+        title: "Central Oxford Mosque Society",
+        category: "Community Platform & PWA",
+        result: "Live Timetable & PWA Architecture",
+        description: "A modern, mobile-first community web portal and progressive web application for Oxford's central mosque, featuring dynamic prayer timetables, Zakat calculation tools, and Sanity CMS.",
+        problem: "Community organizations often struggle with outdated static sites that lack mobile responsiveness and fail to provide fast daily access to prayer timetables.",
+        solution: "Developed an installable PWA with real-time prayer schedule synchronization, an intuitive donation and Zakat calculator, and an integrated headless CMS for instant community updates.",
+        tags: ["React / Vite", "PWA", "Sanity CMS", "Oxford, UK"],
+        image: "./assets/coms-mockup.png",
+        link: "https://coms-website-omega.vercel.app/",
+        color: "#14b8a6"
     }
 ];
 
