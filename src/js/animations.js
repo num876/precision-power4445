@@ -2,12 +2,17 @@ import { isMobile, isHoverable } from './utils.js';
 import VanillaTilt from 'vanilla-tilt';
 
 export const initRevealAnimations = () => {
+    if (isMobile()) {
+        // On mobile, elements are immediately visible to ensure instantaneous zero-lag scrolling
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+        return;
+    }
+
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
                 
-                // Phase 3: Staggered child reveals
                 const children = entry.target.querySelectorAll('.reveal-child');
                 children.forEach((child, index) => {
                     child.style.transitionDelay = `${index * 0.08}s`;
@@ -123,7 +128,7 @@ export const initTilts = () => {
 
 export const initHeroAnimations = () => {
     if (isMobile()) {
-        window.addEventListener('load', () => {
+        const animateHero = () => {
             const heroTitle = document.getElementById('hero-title');
             const heroSubtitle = document.getElementById('hero-subtitle');
             const heroActions = document.getElementById('hero-actions');
@@ -134,15 +139,21 @@ export const initHeroAnimations = () => {
             }
 
             if (heroSubtitle) {
-                heroSubtitle.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.2s forwards';
+                heroSubtitle.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.15s both';
                 heroSubtitle.style.opacity = '1';
             }
 
             if (heroActions) {
-                heroActions.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.4s forwards';
+                heroActions.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.3s both';
                 heroActions.style.opacity = '1';
             }
-        });
+        };
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            requestAnimationFrame(animateHero);
+        } else {
+            window.addEventListener('DOMContentLoaded', animateHero, { once: true });
+        }
     }
 };
 

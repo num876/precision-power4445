@@ -6,20 +6,18 @@ export const initNavigation = () => {
     const navbar = document.querySelector('.navbar');
     if (!navbar) return;
 
-    window.addEventListener('scroll', () => {
-        const scrollThreshold = isMobile() ? 20 : 50;
-        if (window.scrollY > scrollThreshold) {
-            navbar.style.padding = isMobile() ? '0.6rem 0' : '0.8rem 0';
-            navbar.style.background = 'hsla(220, 30%, 5%, 0.95)';
-            navbar.style.backdropFilter = 'blur(10px)';
-            navbar.style.borderBottom = '1px solid var(--glass-border)';
-        } else {
-            navbar.style.padding = isMobile() ? '0.75rem 0' : '1.5rem 0';
-            navbar.style.background = 'transparent';
-            navbar.style.backdropFilter = 'none';
-            navbar.style.borderBottom = 'none';
+    let isScrolled = false;
+    const checkScroll = () => {
+        const threshold = isMobile() ? 20 : 50;
+        const shouldBeScrolled = window.scrollY > threshold;
+        if (shouldBeScrolled !== isScrolled) {
+            isScrolled = shouldBeScrolled;
+            navbar.classList.toggle('scrolled', isScrolled);
         }
-    });
+    };
+
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    checkScroll();
 
     // Mobile Menu
     const hamburger = document.querySelector('.hamburger');
@@ -30,10 +28,11 @@ export const initNavigation = () => {
         hamburger.addEventListener('click', (e) => {
             e.preventDefault();
             const isOpen = mobileMenu.classList.contains('active');
-            mobileMenu.classList.toggle('active');
-            hamburger.classList.toggle('open');
+            mobileMenu.classList.toggle('active', !isOpen);
+            hamburger.classList.toggle('open', !isOpen);
             hamburger.setAttribute('aria-expanded', !isOpen);
-            hapticFeedback(isOpen ? 30 : [20, 10, 20]);
+            document.body.style.overflow = isOpen ? '' : 'hidden';
+            hapticFeedback(isOpen ? 20 : [20, 10, 20]);
         });
 
         mobileLinks.forEach(link => {
@@ -44,11 +43,14 @@ export const initNavigation = () => {
                 mobileMenu.classList.remove('active');
                 hamburger.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
                 
-                setTimeout(() => {
-                    const target = document.querySelector(href);
-                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 300);
+                const target = document.querySelector(href);
+                if (target) {
+                    setTimeout(() => {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 150);
+                }
             });
         });
     }
@@ -56,37 +58,36 @@ export const initNavigation = () => {
 
 export const initModals = () => {
     const modal = document.querySelector('#project-modal');
-    const modalContainer = document.querySelector('.modal-container');
+    const modalContent = document.querySelector('.modal-content');
     const closeBtn = document.querySelector('.close-modal');
 
     if (!modal) return;
 
-    // We'll use a custom event or direct call for opening modals
     window.openProjectModal = (projectId) => {
         const project = projects.find(p => p.id === projectId);
         if (!project) return;
 
-        const modalContent = document.querySelector('.modal-body');
+        const modalBody = document.querySelector('.modal-body');
         const isSmallMobile = window.innerWidth < 480;
         
-        modalContent.innerHTML = `
+        modalBody.innerHTML = `
             <div class="modal-category" style="color: ${project.color}; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">${project.category}</div>
-            <h2 class="modal-title" style="margin-bottom: var(--spacing-sm); font-size: ${isSmallMobile ? '1.5rem' : '2rem'};">${project.title}</h2>
-            <p style="font-size: 1rem; color: var(--text-main); line-height: 1.6; margin-bottom: var(--spacing-md); opacity: 0.9;">${project.description}</p>
+            <h2 class="modal-title" style="margin-bottom: var(--spacing-sm); font-size: ${isSmallMobile ? '1.4rem' : '2rem'}; line-height: 1.2;">${project.title}</h2>
+            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.6; margin-bottom: var(--spacing-md); opacity: 0.9;">${project.description}</p>
             
-            <div class="modal-grid" style="display: grid; grid-template-columns: ${isMobile() ? '1fr' : '1fr 1fr'}; gap: var(--spacing-md); margin-bottom: var(--spacing-lg); background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border);">
+            <div class="modal-grid" style="display: grid; grid-template-columns: ${isMobile() ? '1fr' : '1fr 1fr'}; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); background: rgba(255,255,255,0.03); padding: 16px; border-radius: 12px; border: 1px solid var(--glass-border);">
                 <div class="modal-col">
-                    <h4 style="color: var(--accent-primary); margin-bottom: var(--spacing-xs); font-size: 0.9rem; text-transform: uppercase;">Project Challenge</h4>
+                    <h4 style="color: var(--accent-primary); margin-bottom: 4px; font-size: 0.85rem; text-transform: uppercase;">Project Challenge</h4>
                     <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">${project.problem}</p>
                 </div>
                 <div class="modal-col">
-                    <h4 style="color: #4ade80; margin-bottom: var(--spacing-xs); font-size: 0.9rem; text-transform: uppercase;">Delivered Solution</h4>
+                    <h4 style="color: #4ade80; margin-bottom: 4px; font-size: 0.85rem; text-transform: uppercase;">Delivered Solution</h4>
                     <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">${project.solution}</p>
                 </div>
             </div>
 
-            <div style="text-align: center; margin-top: var(--spacing-md);">
-                <a href="${project.link}" target="_blank" class="btn btn-primary" style="width: ${isMobile() ? '100%' : 'auto'};">Visit Live Website &rarr;</a>
+            <div style="text-align: center; margin-top: var(--spacing-sm);">
+                <a href="${project.link}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: ${isMobile() ? '100%' : 'auto'}; min-height: 48px; display: inline-flex; align-items: center; justify-content: center;">Visit Live Website &rarr;</a>
             </div>
         `;
         modal.classList.add('active');
@@ -105,19 +106,19 @@ export const initModals = () => {
         if (e.target === modal) closeModal();
     });
 
-    if (modalContainer) {
+    if (modalContent) {
         let touchStartY = 0;
         
-        modal.addEventListener('touchstart', (e) => {
+        modalContent.addEventListener('touchstart', (e) => {
             touchStartY = e.touches[0].clientY;
         }, { passive: true });
 
-        modal.addEventListener('touchend', (e) => {
+        modalContent.addEventListener('touchend', (e) => {
             const touchEndY = e.changedTouches[0].clientY;
             const swipeDistance = touchEndY - touchStartY;
             
-            // Close if swipe distance is > 100px and we are at the top of the modal
-            if (swipeDistance > 100 && modalContainer.scrollTop <= 0) {
+            // Close if swipe distance is > 80px and user is scrolled to top of modal
+            if (swipeDistance > 80 && modalContent.scrollTop <= 5) {
                 closeModal();
             }
         }, { passive: true });
