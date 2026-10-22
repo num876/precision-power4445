@@ -37,6 +37,19 @@ export const projects = [
         image: "./assets/contextly-mockup.png",
         link: "https://v0-contextly-alpha.vercel.app/",
         color: "#818cf8"
+    },
+    {
+        id: "lexis",
+        title: "Lexis AI",
+        category: "AI Content & Writing Platform",
+        result: "Multi-Format AI Generation",
+        description: "A modern SaaS platform and AI-powered writing assistant engineered for creators and businesses to ideate, draft, and publish high-converting blogs, emails, and social content.",
+        problem: "Content creation workflows are fragmented across multiple tools, leading to writer's block, inconsistent brand voice, and hours lost in draft revisions.",
+        solution: "Built an intuitive, dark-mode web application with rapid AI generation pipelines, versatile template controls, and frictionless export workflows.",
+        tags: ["Next.js", "AI Assistant", "Tailwind CSS", "SaaS"],
+        image: "./assets/lexis-mockup.png",
+        link: "https://v0-lexis-ai-backend-ruddy.vercel.app/",
+        color: "#3b82f6"
     }
 ];
 
