@@ -100,6 +100,11 @@
     }
     </script>
 
+    <!-- Google Fonts Optimized Preconnect & Stylesheet -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@400;700&display=swap">
+
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -265,7 +270,10 @@
             <div class="about-grid">
                 <div class="about-image-column reveal-child">
                     <div class="about-image-wrapper glass">
-                        <img src="./assets/numayr-malik.jpg" alt="Numayr Malik - Web Designer & Developer" class="about-img">
+                        <picture>
+                            <source srcset="./assets/numayr-malik.webp" type="image/webp">
+                            <img src="./assets/numayr-malik.jpg" alt="Numayr Malik - Web Designer & Developer" class="about-img" width="500" height="500" loading="lazy" decoding="async">
+                        </picture>
                         <div class="location-tag">
                             <span class="pulse-dot"></span>
                             OXFORD, UK // WEB DEVELOPER
@@ -423,13 +431,7 @@
         </div>
     </div>
 
-    <!-- Grain Filter (Phase 1) -->
-    <svg style="display:none;">
-        <filter id="noiseFilter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" stitchTiles="stitch" />
-        </filter>
-    </svg>
-
     <script type="module" src="./main.js"></script>
 </body>
 </html>
+

@@ -8,7 +8,7 @@ export const projects = [
         problem: "Traditional clinic websites rely on slow contact forms or phone-only booking, causing patient drop-off and front-desk friction.",
         solution: "Engineered an intuitive, mobile-optimized booking interface with live appointment confirmation and a calm, clinical visual aesthetic.",
         tags: ["Bespoke UI", "React", "Live Booking"],
-        image: "./assets/lumina-mockup.png",
+        image: "./assets/lumina-mockup.webp",
         link: "https://v0-lumina-dental-landing-page-blond.vercel.app/",
         color: "var(--accent-lumina)"
     },
@@ -21,7 +21,7 @@ export const projects = [
         problem: "Sports academies often face site slowdowns and confusing registration funnels during peak enrollment periods.",
         solution: "Designed a high-contrast, mobile-first website with sub-second page loads and seamless digital registration to convert visitors into active members.",
         tags: ["Mobile-First", "High Performance", "Membership UI"],
-        image: "./assets/oxford-mockup.png",
+        image: "./assets/oxford-mockup.webp",
         link: "https://v0-website-improvement-suggestions-tau.vercel.app/",
         color: "var(--accent-oxford)"
     },
@@ -34,7 +34,7 @@ export const projects = [
         problem: "Generic cold outreach suffers from low open and reply rates, while manually researching prospect websites and writing custom pitches takes hours.",
         solution: "Engineered a streamlined, conversion-first web application interface featuring live URL website scraping, AI personalization pipelines, and real-time Supabase data persistence.",
         tags: ["Next.js", "AI Integration", "Supabase", "SaaS UI"],
-        image: "./assets/contextly-mockup.png",
+        image: "./assets/contextly-mockup.webp",
         link: "https://v0-contextly-alpha.vercel.app/",
         color: "#818cf8"
     },
@@ -47,7 +47,7 @@ export const projects = [
         problem: "Content creation workflows are fragmented across multiple tools, leading to writer's block, inconsistent brand voice, and hours lost in draft revisions.",
         solution: "Built an intuitive, dark-mode web application with rapid AI generation pipelines, versatile template controls, and frictionless export workflows.",
         tags: ["Next.js", "AI Assistant", "Tailwind CSS", "SaaS"],
-        image: "./assets/lexis-mockup.png",
+        image: "./assets/lexis-mockup.webp",
         link: "https://v0-lexis-ai-backend-ruddy.vercel.app/",
         color: "#3b82f6"
     },
@@ -60,7 +60,7 @@ export const projects = [
         problem: "Traditional combat sports websites suffer from cluttered layouts, buried timetables, and slow contact forms that deter prospective students.",
         solution: "Designed a high-contrast, action-packed visual presence with prominent coach credentials, clear class schedules, and single-tap trial booking.",
         tags: ["Next.js", "Sports Web Design", "Tailwind CSS", "Mobile-First"],
-        image: "./assets/counter-combat-mockup.png",
+        image: "./assets/counter-combat-mockup.webp",
         link: "https://counter-combat-club.vercel.app/",
         color: "#ef4444"
     },
@@ -73,7 +73,7 @@ export const projects = [
         problem: "Mainstream sports media sites are overwhelmed with intrusive ads, sluggish trackers, and cluttered navigation that disrupt reading.",
         solution: "Engineered an aesthetic neobrutalist web app featuring real-time match scoreboards, crisp editorial typography, and high-speed archival exploration.",
         tags: ["Next.js", "Neobrutalism", "Tailwind CSS", "Live Scores"],
-        image: "./assets/forma-mockup.png",
+        image: "./assets/forma-mockup.webp",
         link: "https://forma-two-navy.vercel.app/",
         color: "#fbbf24"
     },
@@ -86,7 +86,7 @@ export const projects = [
         problem: "Community organizations often struggle with outdated static sites that lack mobile responsiveness and fail to provide fast daily access to prayer timetables.",
         solution: "Developed an installable PWA with real-time prayer schedule synchronization, an intuitive donation and Zakat calculator, and an integrated headless CMS for instant community updates.",
         tags: ["React / Vite", "PWA", "Sanity CMS", "Oxford, UK"],
-        image: "./assets/coms-mockup.png",
+        image: "./assets/coms-mockup.webp",
         link: "https://coms-website-omega.vercel.app/",
         color: "#14b8a6"
     }
@@ -96,11 +96,18 @@ export const renderProjects = () => {
     const projectGrid = document.querySelector('.project-grid');
     if (!projectGrid) return;
 
-    projectGrid.innerHTML = projects.map(project => `
+    projectGrid.innerHTML = projects.map((project, index) => `
         <article class="project-card reveal" data-tilt data-id="${project.id}">
             <div class="project-image-link" style="cursor: pointer;">
                 <div class="project-image-container">
-                    <img src="${project.image}" alt="${project.title}" class="project-img">
+                    <img src="${project.image}" 
+                         alt="${project.title}" 
+                         class="project-img"
+                         width="800" 
+                         height="500"
+                         loading="${index < 2 ? 'eager' : 'lazy'}"
+                         decoding="async"
+                         ${index === 0 ? 'fetchpriority="high"' : ''}>
                     <div class="project-result-badge">${project.result}</div>
                     <div class="project-overlay">
                         <span class="btn btn-primary btn-sm">Technical Brief</span>

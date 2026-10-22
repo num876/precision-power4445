@@ -10,14 +10,14 @@ export const initRevealAnimations = () => {
                 // Phase 3: Staggered child reveals
                 const children = entry.target.querySelectorAll('.reveal-child');
                 children.forEach((child, index) => {
-                    child.style.transitionDelay = `${index * 0.1}s`;
+                    child.style.transitionDelay = `${index * 0.08}s`;
                     child.classList.add('active');
                 });
 
                 revealObserver.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 };
@@ -27,28 +27,45 @@ export const initCustomCursor = () => {
     const cursorOutline = document.querySelector(".cursor-outline");
 
     if (isHoverable && !isMobile() && cursorDot && cursorOutline) {
+        let mouseX = -100;
+        let mouseY = -100;
+        let outlineX = -100;
+        let outlineY = -100;
+        let isHovered = false;
+        let isRunning = false;
+
+        const render = () => {
+            if (!isRunning) return;
+            // Smooth lerp interpolation for outline
+            outlineX += (mouseX - outlineX) * 0.18;
+            outlineY += (mouseY - outlineY) * 0.18;
+
+            cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+            cursorOutline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) translate(-50%, -50%) scale(${isHovered ? 1.5 : 1})`;
+
+            requestAnimationFrame(render);
+        };
+
         window.addEventListener("mousemove", (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            if (!isRunning) {
+                outlineX = mouseX;
+                outlineY = mouseY;
+                isRunning = true;
+                requestAnimationFrame(render);
+            }
+        }, { passive: true });
 
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-
-            cursorOutline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 500, fill: "forwards" });
-        });
-
-        document.querySelectorAll('a, button, .project-card').forEach(el => {
+        document.querySelectorAll('a, button, .project-card, .faq-trigger').forEach(el => {
             el.addEventListener('mouseenter', () => {
-                cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
-                cursorOutline.style.background = 'hsla(240, 100%, 70%, 0.1)';
-            });
+                isHovered = true;
+                cursorOutline.style.background = 'hsla(240, 100%, 70%, 0.12)';
+            }, { passive: true });
             el.addEventListener('mouseleave', () => {
-                cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
+                isHovered = false;
                 cursorOutline.style.background = 'transparent';
-            });
+            }, { passive: true });
         });
     }
 };
@@ -57,24 +74,49 @@ export const initHeroEffects = () => {
     const hero = document.querySelector('#hero');
     const cursorGlow = document.querySelector('.hero-cursor-glow');
 
-    if (hero && isHoverable && !isMobile()) {
+    if (hero && cursorGlow && isHoverable && !isMobile()) {
+        let targetX = 0;
+        let targetY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        let isInside = false;
+
+        const renderGlow = () => {
+            if (!isInside) return;
+            currentX += (targetX - currentX) * 0.12;
+            currentY += (targetY - currentY) * 0.12;
+            cursorGlow.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+            requestAnimationFrame(renderGlow);
+        };
+
+        let heroRect = null;
+        hero.addEventListener('mouseenter', () => {
+            heroRect = hero.getBoundingClientRect();
+            isInside = true;
+            requestAnimationFrame(renderGlow);
+        }, { passive: true });
+
         hero.addEventListener('mousemove', (e) => {
-            const { clientX, clientY } = e;
-            if (cursorGlow) {
-                cursorGlow.style.left = `${clientX}px`;
-                cursorGlow.style.top = `${clientY}px`;
-            }
-        });
+            if (!heroRect) heroRect = hero.getBoundingClientRect();
+            targetX = e.clientX - heroRect.left;
+            targetY = e.clientY - heroRect.top;
+        }, { passive: true });
+
+        hero.addEventListener('mouseleave', () => {
+            isInside = false;
+            heroRect = null;
+        }, { passive: true });
     }
 };
 
 export const initTilts = () => {
     if (isHoverable && !isMobile()) {
         VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
-            max: 15,
-            speed: 400,
+            max: 10,
+            speed: 500,
             glare: true,
-            "max-glare": 0.2,
+            "max-glare": 0.15,
+            scale: 1.02,
         });
     }
 };
@@ -85,8 +127,6 @@ export const initHeroAnimations = () => {
             const heroTitle = document.getElementById('hero-title');
             const heroSubtitle = document.getElementById('hero-subtitle');
             const heroActions = document.getElementById('hero-actions');
-            const badgeContainer = document.getElementById('badge-container');
-            const badgePills = document.querySelectorAll('.badge-pill');
 
             if (heroTitle) {
                 heroTitle.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards';
@@ -98,68 +138,46 @@ export const initHeroAnimations = () => {
                 heroSubtitle.style.opacity = '1';
             }
 
-            if (badgeContainer) {
-                badgePills.forEach((pill, index) => {
-                    pill.style.animation = `bounce-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${0.4 + index * 0.1}s forwards`;
-                    pill.style.opacity = '0';
-                });
-            }
-
             if (heroActions) {
-                heroActions.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards';
+                heroActions.style.animation = 'slide-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.4s forwards';
                 heroActions.style.opacity = '1';
             }
-
-            // Buttons touch feedback
-            const buttons = document.querySelectorAll('.hero-actions .btn');
-            buttons.forEach(btn => {
-                btn.addEventListener('touchstart', function() {
-                    this.style.transform = 'scale(0.98)';
-                    if (navigator.vibrate) navigator.vibrate(20);
-                });
-                btn.addEventListener('touchend', function() {
-                    this.style.transform = 'scale(1)';
-                });
-            });
         });
     }
 };
+
 export const initMagneticButtons = () => {
     if (isMobile()) return;
 
     const magneticElements = document.querySelectorAll('.btn, .logo, .nav-links a');
     
     magneticElements.forEach(el => {
+        let rect = null;
+
+        el.addEventListener('mouseenter', () => {
+            rect = el.getBoundingClientRect();
+        }, { passive: true });
+
         el.addEventListener('mousemove', (e) => {
+            if (!rect) rect = el.getBoundingClientRect();
             const { clientX, clientY } = e;
-            const { left, top, width, height } = el.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
             
-            // Calculate center of element relative to viewport
-            const centerX = left + width / 2;
-            const centerY = top + height / 2;
+            const deltaX = (clientX - centerX) * 0.25;
+            const deltaY = (clientY - centerY) * 0.25;
             
-            // Calculate distance from center
-            const deltaX = clientX - centerX;
-            const deltaY = clientY - centerY;
-            
-            // Magnetic pull strength (adjustable)
-            const strength = 0.3; // Lower = more subtle/stable
-            const x = deltaX * strength;
-            const y = deltaY * strength;
-            
-            // Apply transform relative to current position
-            el.style.transform = `translate(${x}px, ${y}px)`;
-            el.style.zIndex = "100";
-        });
+            el.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0)`;
+        }, { passive: true });
 
         el.addEventListener('mouseleave', () => {
+            rect = null;
             el.style.transform = '';
-            el.style.zIndex = "";
-        });
+        }, { passive: true });
     });
 };
 
-/* Phase 7: Mobile Performance - Pause Marquee when not visible */
+/* Pause Marquee when not visible on screen */
 export const initMarqueePerformance = () => {
     const marquee = document.querySelector('.marquee-content');
     if (!marquee) return;
