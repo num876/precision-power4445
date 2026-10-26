@@ -32,6 +32,7 @@ export const initNavigation = () => {
             hamburger.classList.toggle('open', !isOpen);
             hamburger.setAttribute('aria-expanded', !isOpen);
             document.body.style.overflow = isOpen ? '' : 'hidden';
+            isOpen ? startScroll() : stopScroll();
             hapticFeedback(isOpen ? 20 : [20, 10, 20]);
         });
 
@@ -44,6 +45,7 @@ export const initNavigation = () => {
                 hamburger.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
                 document.body.style.overflow = '';
+                startScroll();
                 
                 const target = document.querySelector(href);
                 if (target) {
