@@ -1813,3 +1813,19 @@ textarea.form-input { min-height: 120px; resize: vertical; }
   }
   .projects .project-card:active .project-image-container { opacity: 0.85; }
 }
+
+/* Mobile scroll reveal (GPU-only properties; classes added/removed by JS) */
+@media screen and (max-width: 768px) {
+  .m-reveal {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition: opacity 0.45s ease-out, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  }
+  .m-reveal.m-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .m-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}

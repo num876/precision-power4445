@@ -5,6 +5,7 @@ export const initRevealAnimations = () => {
     if (isMobile()) {
         // On mobile, elements are immediately visible to ensure instantaneous zero-lag scrolling
         document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+        initMobileScrollReveal();
         return;
     }
 
@@ -202,3 +203,60 @@ export const initMarqueePerformance = () => {
     const parent = document.querySelector('.tech-marquee');
     if (parent) observer.observe(parent);
 };
+
+/*
+ * Mobile scroll reveal: lightweight, compositor-only (opacity + transform),
+ * one IntersectionObserver, each element unobserved after it animates.
+ * Hero content is excluded so first paint / LCP is never delayed.
+ */
+const MOBILE_REVEAL_TARGETS = [
+    '.section-header',
+    '.tech-marquee',
+    '.service-card',
+    '.process-item',
+    '.about-image-wrapper',
+    '.about-title', '.about-lead', '.about-bio',
+    '.expertise-row > *',
+    '.outcome-box',
+    '.project-card',
+    '.faq-item',
+    '.footer-title',
+    '.contact-form-container',
+].join(',');
+
+function initMobileScrollReveal() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion || !('IntersectionObserver' in window)) return;
+
+    const targets = [...document.querySelectorAll(MOBILE_REVEAL_TARGETS)]
+        .filter(el => !el.closest('.hero'));
+
+    // Leave anything already on screen untouched (no flash on load)
+    const vh = window.innerHeight;
+    const pending = targets.filter(el => el.getBoundingClientRect().top > vh * 0.9);
+    if (!pending.length) return;
+
+    pending.forEach(el => el.classList.add('m-reveal'));
+
+    const observer = new IntersectionObserver((entries) => {
+        // Stagger only elements entering in the same frame (e.g. a grid row)
+        let i = 0;
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            el.style.transitionDelay = `${Math.min(i++, 4) * 60}ms`;
+            el.classList.add('m-in');
+            observer.unobserve(el);
+            // Clean up so hover/tap transitions aren't delayed afterwards
+            const cleanup = (e) => {
+                if (e.target !== el || e.propertyName !== 'transform') return;
+                el.removeEventListener('transitionend', cleanup);
+                el.style.transitionDelay = '';
+                el.classList.remove('m-reveal', 'm-in');
+            };
+            el.addEventListener('transitionend', cleanup);
+        });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.01 });
+
+    pending.forEach(el => observer.observe(el));
+}
