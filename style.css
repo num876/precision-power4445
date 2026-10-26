@@ -1795,3 +1795,21 @@ textarea.form-input { min-height: 120px; resize: vertical; }
   .status-badge .status-text { display: none; }
   .status-badge { padding: 10px; }
 }
+
+/* Mobile project thumbnails */
+@media screen and (max-width: 768px) {
+  .projects .project-card .project-image-container { aspect-ratio: 16 / 10; background: #0b0d14; }
+  .projects .project-card .project-img { filter: none; object-position: top center; transform: none; }
+  .projects .project-overlay { display: none; }
+  .projects .project-result-badge {
+    top: 10px;
+    left: 10px;
+    padding: 4px 10px;
+    font-size: 0.62rem;
+    max-width: calc(100% - 20px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .projects .project-card:active .project-image-container { opacity: 0.85; }
+}
