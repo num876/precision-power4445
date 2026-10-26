@@ -9,6 +9,9 @@ export const initRevealAnimations = () => {
         return;
     }
 
+    // Hero content is above the fold: show instantly so LCP isn't delayed
+    document.querySelectorAll('.hero .reveal').forEach(el => el.classList.add('active'));
+
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -16,8 +19,10 @@ export const initRevealAnimations = () => {
                 
                 const children = entry.target.querySelectorAll('.reveal-child');
                 children.forEach((child, index) => {
-                    child.style.transitionDelay = `${index * 0.08}s`;
+                    child.style.transitionDelay = `${Math.min(index, 6) * 0.06}s`;
                     child.classList.add('active');
+                    // Clear delay so later hover transitions respond instantly
+                    setTimeout(() => { child.style.transitionDelay = ''; }, 900 + index * 60);
                 });
 
                 revealObserver.unobserve(entry.target);
@@ -25,7 +30,7 @@ export const initRevealAnimations = () => {
         });
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    document.querySelectorAll('.reveal:not(.active)').forEach(el => revealObserver.observe(el));
 };
 
 export const initCustomCursor = () => {
@@ -49,6 +54,11 @@ export const initCustomCursor = () => {
             cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
             cursorOutline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) translate(-50%, -50%) scale(${isHovered ? 1.5 : 1})`;
 
+            // Sleep the loop once the outline has caught up (no idle rAF work)
+            if (Math.abs(mouseX - outlineX) < 0.1 && Math.abs(mouseY - outlineY) < 0.1) {
+                isRunning = false;
+                return;
+            }
             requestAnimationFrame(render);
         };
 
@@ -56,8 +66,6 @@ export const initCustomCursor = () => {
             mouseX = e.clientX;
             mouseY = e.clientY;
             if (!isRunning) {
-                outlineX = mouseX;
-                outlineY = mouseY;
                 isRunning = true;
                 requestAnimationFrame(render);
             }

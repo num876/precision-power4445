@@ -1829,3 +1829,111 @@ textarea.form-input { min-height: 120px; resize: vertical; }
 @media (prefers-reduced-motion: reduce) {
   .m-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
+
+/* ==========================================================================
+   8. DESKTOP PERFORMANCE PASS
+   ========================================================================== */
+@media screen and (min-width: 769px) {
+  /* Reveal: animate only compositor properties (was `transition: all`) */
+  .reveal {
+    transform: translate3d(0, 24px, 0);
+    transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-child {
+    transform: translate3d(0, 16px, 0);
+    transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.active, .reveal-child.active { transform: none; }
+
+  /* Whole sections no longer slide (huge layers); their children still stagger in */
+  section.reveal { opacity: 1; transform: none; transition: none; }
+
+  /* Hero orbs: filter:blur(100px) on animated 600px layers repainted every frame.
+     The radial gradients are already soft, so drop the filter and promote to GPU. */
+  .hero .hero-orb,
+  .hero .hero-cursor-glow {
+    filter: none;
+    will-change: transform;
+    contain: strict;
+  }
+  .hero .hero-orb { animation-duration: 20s; }
+
+  /* Specific transitions instead of `all` on frequently-hovered elements */
+  .services .service-card {
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s ease;
+  }
+  .projects .project-card {
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease, background-color 0.4s ease;
+  }
+  .projects .project-card .project-img {
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), filter 0.4s ease;
+    will-change: auto;
+  }
+  .projects .project-overlay { transition: opacity 0.3s ease; }
+  .faq-item { transition: border-color 0.3s ease; }
+  .btn { transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-child { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .hero .hero-orb, .tech-marquee .marquee-content { animation: none !important; }
+}
+
+/* Mobile navbar */
+@media screen and (max-width: 768px) {
+  .cursor-dot, .cursor-outline { display: none !important; }
+
+  .navbar.glass {
+    padding: env(safe-area-inset-top) 0 0;
+    border: none;
+    border-bottom: 1px solid transparent;
+    border-radius: 0;
+    box-shadow: none;
+    background: hsla(220, 30%, 5%, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  .navbar.glass.scrolled {
+    padding: env(safe-area-inset-top) 0 0;
+    background: hsla(220, 30%, 5%, 0.92);
+    border-bottom-color: hsla(0, 0%, 100%, 0.08);
+  }
+  .navbar .navbar-inner {
+    height: 60px;
+    padding: 0 8px 0 16px;
+  }
+  .navbar .logo { font-size: 1.1rem; letter-spacing: 0.01em; white-space: nowrap; }
+
+  .hamburger {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    gap: 5px;
+    border-radius: 10px;
+  }
+  .hamburger span {
+    width: 22px;
+    height: 2px;
+    margin: 0;
+    border-radius: 2px;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .hamburger:active { background: hsla(0, 0%, 100%, 0.06); }
+
+  /* Keep the bar seamless with the open menu overlay */
+  body:has(.mobile-menu.active) .navbar.glass {
+    background: transparent;
+    border-bottom-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .mobile-menu { padding-top: calc(60px + env(safe-area-inset-top)); }
+
+  .hero { padding-top: calc(84px + env(safe-area-inset-top)); }
+}

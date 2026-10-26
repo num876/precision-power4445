@@ -1,12 +1,14 @@
 export const SCROLL_CONFIG = {
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    // lerp smoothing feels more responsive than a fixed 1.2s duration
+    lerp: 0.12,
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,
     wheelMultiplier: 1,
     touchMultiplier: 2,
     infinite: false,
+    anchors: { offset: -72 },
+    autoRaf: true,
 };
 
 export const BREAKPOINTS = {

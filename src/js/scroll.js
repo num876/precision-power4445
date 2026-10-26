@@ -7,12 +7,7 @@ let lenis = null;
 export const initScroll = () => {
     if (!isTouchDevice) {
         lenis = new Lenis(SCROLL_CONFIG);
-
-        const raf = (time) => {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        };
-        requestAnimationFrame(raf);
+        // autoRaf in SCROLL_CONFIG: Lenis drives its own rAF loop
     }
     return lenis;
 };
